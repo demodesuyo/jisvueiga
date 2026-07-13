@@ -43,6 +43,11 @@ function initHeader() {
   const onScroll = () => header.classList.toggle("is-scrolled", window.scrollY > 40);
   onScroll();
   window.addEventListener("scroll", onScroll, { passive: true });
+  const setH = () =>
+    document.documentElement.style.setProperty("--header-h", header.offsetHeight + "px");
+  setH();
+  window.addEventListener("resize", setH, { passive: true });
+  if ("ResizeObserver" in window) new ResizeObserver(setH).observe(header);
 }
 
 /* ---- ハンバーガー(a11y構造は削除禁止) ---- */
@@ -153,7 +158,7 @@ function initDust() {
   const ctx = canvas.getContext("2d");
   let w, h, dpr, glints, raf;
 
-  const COUNT = window.matchMedia("(max-width: 767px)").matches ? 46 : 90;
+  const COUNT = window.matchMedia("(max-width: 767px)").matches ? 70 : 130;
 
   function resize() {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -196,15 +201,28 @@ function initDust() {
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
       ctx.fillStyle = `rgba(${c}, ${alpha})`;
       ctx.fill();
+      // 波に合わせてゆっくり上下する
+      p.y += Math.sin(p.a * 0.5) * 0.06;
       // 強く光る瞬間は十字にきらり
-      if (tw > 0.985) {
-        const len = p.r * 6;
-        ctx.strokeStyle = `rgba(${c}, 0.55)`;
-        ctx.lineWidth = 0.9;
+      if (tw > 0.975) {
+        const len = p.r * 7;
+        ctx.strokeStyle = `rgba(${c}, 0.6)`;
+        ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.moveTo(p.x - len, p.y); ctx.lineTo(p.x + len, p.y);
         ctx.moveTo(p.x, p.y - len); ctx.lineTo(p.x, p.y + len);
         ctx.stroke();
+      }
+      // ごくまれに大きなフレア(太陽の直射)
+      if (tw > 0.999) {
+        const L = p.r * 16;
+        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, L);
+        g.addColorStop(0, `rgba(${c}, 0.5)`);
+        g.addColorStop(1, `rgba(${c}, 0)`);
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, L, 0, Math.PI * 2);
+        ctx.fill();
       }
     }
     raf = requestAnimationFrame(tick);

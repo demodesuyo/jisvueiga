@@ -747,3 +747,63 @@ body {
 .sister p { color: #b9c4c0; font-size: 14px; margin-top: 6px; }
 .sister .button { background: #e9a83b; border-color: #e9a83b; color: #171006; box-shadow: none; }
 .sister .button:hover { background: transparent; color: #e9a83b; }
+
+/* ---------- 10. 海感強化+ヘッダー重なり修正(v1.1) ---------- */
+/* ヘッダー実高さぶんの余白を自動確保(JSが --header-h を設定) */
+.hero { padding-top: calc(var(--header-h, 120px) + 24px); }
+.page-header { padding-top: calc(var(--header-h, 120px) + clamp(32px, 7vw, 80px)); }
+
+/* 太陽: 右上に陽だまり */
+.hero {
+  background:
+    radial-gradient(34% 26% at 82% 6%, rgba(246, 196, 83, 0.4), rgba(246, 196, 83, 0.12) 55%, transparent 75%),
+    radial-gradient(46% 34% at 22% 18%, rgba(191, 232, 240, 0.55), transparent 70%),
+    radial-gradient(52% 40% at 60% 10%, rgba(255, 255, 255, 0.9), transparent 70%);
+}
+
+/* 波光: 揺らぐ光の輪(コースティクス)を二層に */
+.hero__beam {
+  background:
+    radial-gradient(58% 44% at 28% 32%, rgba(178, 226, 236, 0.6), transparent 68%),
+    radial-gradient(48% 38% at 72% 58%, rgba(159, 216, 228, 0.5), transparent 70%);
+  animation: caustics 12s ease-in-out infinite alternate;
+}
+.hero__beam::before {
+  display: block;
+  content: "";
+  position: absolute; inset: -20%;
+  background:
+    repeating-radial-gradient(circle at 34% 40%, rgba(255, 255, 255, 0) 0 46px, rgba(255, 255, 255, 0.16) 46px 58px, rgba(255, 255, 255, 0) 58px 112px),
+    repeating-radial-gradient(circle at 70% 62%, rgba(191, 232, 240, 0) 0 60px, rgba(191, 232, 240, 0.2) 60px 74px, rgba(191, 232, 240, 0) 74px 142px);
+  filter: blur(6px);
+  animation: ripple 18s ease-in-out infinite alternate;
+}
+@keyframes ripple {
+  from { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 0.7; }
+  to { transform: translate(-2.5%, 1.8%) rotate(2deg) scale(1.05); opacity: 1; }
+}
+
+/* うちよせる波: 二層の波が違う速さで流れ、ゆっくり上下する */
+.hero::before {
+  content: "";
+  position: absolute; left: 0; right: 0; bottom: -2px; height: 64px; z-index: 1;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 64' preserveAspectRatio='none'%3E%3Cpath d='M0 34 Q 150 10 300 30 T 600 30 T 900 34 T 1200 26 L 1200 64 L 0 64 Z' fill='%23cfe6ee' fill-opacity='0.75'/%3E%3C/svg%3E") repeat-x bottom / 1200px 64px;
+  animation: waveBack 16s linear infinite, waveBob 7s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+.hero::after {
+  height: 52px; z-index: 2;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 52' preserveAspectRatio='none'%3E%3Cpath d='M0 26 Q 150 4 300 24 T 600 24 T 900 26 T 1200 20 L 1200 52 L 0 52 Z' fill='%23f4f9fb'/%3E%3C/svg%3E") repeat-x bottom / 1200px 52px;
+  animation: waveFront 9s linear infinite, waveBob 5.5s ease-in-out infinite alternate-reverse;
+}
+@keyframes waveBack { from { background-position-x: 0; } to { background-position-x: 1200px; } }
+@keyframes waveFront { from { background-position-x: 1200px; } to { background-position-x: 0; } }
+@keyframes waveBob {
+  from { transform: translateY(0); }
+  to { transform: translateY(-7px); }
+}
+
+html.is-motion-off .hero::before,
+html.is-motion-off .hero::after,
+html.is-motion-off .hero__beam,
+html.is-motion-off .hero__beam::before { animation: none !important; }
