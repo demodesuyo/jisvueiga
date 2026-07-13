@@ -151,35 +151,40 @@ function initChars() {
   });
 }
 
-/* ---- 海面のきらめき(シグネチャー): 陽の反射がちらちらと瞬く ---- */
+/* ---- 海面のきらめき(v1.2): 水平線下に太陽の「光の道」。白のみ ---- */
 function initDust() {
   const canvas = document.querySelector(".hero__dust");
   if (!canvas) return;
   const ctx = canvas.getContext("2d");
   let w, h, dpr, glints, raf;
 
-  const COUNT = window.matchMedia("(max-width: 767px)").matches ? 70 : 130;
+  const COUNT = window.matchMedia("(max-width: 767px)").matches ? 90 : 160;
+  const PATH_X = 0.62;   // 光の道の中心(横位置)
 
   function resize() {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
     w = canvas.offsetWidth;
-    h = canvas.offsetHeight;
+    h = canvas.offsetHeight;   // canvasは水平線から下だけを覆う
     canvas.width = w * dpr;
     canvas.height = h * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
   function spawn() {
-    // 画面を斜めに横切る「陽の道」に沿って密集させる
-    const t = Math.random();
-    const gold = Math.random() < 0.3;
+    // 水平線に近いほど密集し、遠ざかるほど光の道が広がる
+    const d = Math.pow(Math.random(), 1.7);        // 0=水平線際に偏る
+    const y = d * h;
+    const spread = 0.06 + d * 0.3;                  // 遠近: 下ほど道幅が広い
+    const onPath = Math.random() < 0.8;
+    const x = onPath
+      ? w * (PATH_X + (Math.random() - 0.5) * spread)
+      : w * Math.random();
     return {
-      x: w * (0.1 + t * 0.85) + (Math.random() - 0.5) * w * 0.3,
-      y: h * (0.15 + t * 0.75) + (Math.random() - 0.5) * h * 0.22,
-      r: 0.7 + Math.random() * 1.6,
+      x, y,
+      len: (1.5 + Math.random() * 5) * (0.5 + d),   // 横長のグリント
       a: Math.random() * Math.PI * 2,
-      s: 0.01 + Math.random() * 0.035,
-      gold,
+      s: 0.012 + Math.random() * 0.04,
+      base: onPath ? 0.5 : 0.2,
     };
   }
 
@@ -192,37 +197,23 @@ function initDust() {
     ctx.clearRect(0, 0, w, h);
     for (const p of glints) {
       p.a += p.s * 60;
-      p.x += 0.06; // 波がゆっくり流れる
-      if (p.x > w + 10) Object.assign(p, spawn(), { x: -5 });
+      p.x += 0.05;
+      if (p.x > w + 12) Object.assign(p, spawn(), { x: -8 });
       const tw = Math.abs(Math.sin(p.a));
-      const alpha = 0.1 + tw * 0.6;
-      const c = p.gold ? "246, 196, 83" : "255, 255, 255";
+      const alpha = p.base * (0.15 + tw * 0.85);
+      // 海のきらめきは横に細長い
+      ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
+      ctx.lineWidth = 1.1;
       ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${c}, ${alpha})`;
-      ctx.fill();
-      // 波に合わせてゆっくり上下する
-      p.y += Math.sin(p.a * 0.5) * 0.06;
-      // 強く光る瞬間は十字にきらり
-      if (tw > 0.975) {
-        const len = p.r * 7;
-        ctx.strokeStyle = `rgba(${c}, 0.6)`;
-        ctx.lineWidth = 1;
+      ctx.moveTo(p.x - p.len, p.y);
+      ctx.lineTo(p.x + p.len, p.y);
+      ctx.stroke();
+      // 最も強い瞬間だけ小さな十字
+      if (tw > 0.99) {
         ctx.beginPath();
-        ctx.moveTo(p.x - len, p.y); ctx.lineTo(p.x + len, p.y);
-        ctx.moveTo(p.x, p.y - len); ctx.lineTo(p.x, p.y + len);
+        ctx.moveTo(p.x, p.y - p.len * 0.6);
+        ctx.lineTo(p.x, p.y + p.len * 0.6);
         ctx.stroke();
-      }
-      // ごくまれに大きなフレア(太陽の直射)
-      if (tw > 0.999) {
-        const L = p.r * 16;
-        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, L);
-        g.addColorStop(0, `rgba(${c}, 0.5)`);
-        g.addColorStop(1, `rgba(${c}, 0)`);
-        ctx.fillStyle = g;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, L, 0, Math.PI * 2);
-        ctx.fill();
       }
     }
     raf = requestAnimationFrame(tick);

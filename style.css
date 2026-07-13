@@ -807,3 +807,51 @@ html.is-motion-off .hero::before,
 html.is-motion-off .hero::after,
 html.is-motion-off .hero__beam,
 html.is-motion-off .hero__beam::before { animation: none !important; }
+
+/* ---------- 11. 「海の絵」への作り直し(v1.2): オレンジ廃止・水平線導入 ---------- */
+/* 空(上) → 水平線(55%) → 海(下) */
+.hero {
+  background: linear-gradient(180deg,
+    #fdffff 0%,
+    #eef7fa 34%,
+    #e2f1f5 52%,
+    #d5ecf1 54.8%,
+    #c4e5ec 55%,
+    #bde1e9 68%,
+    #aed8e2 100%);
+}
+/* 海面レイヤー: 水平線から下だけ。さざなみの横縞+波光 */
+.hero__beam {
+  inset: auto 0 0 0; top: 54.6%;
+  background:
+    repeating-linear-gradient(180deg,
+      rgba(255, 255, 255, 0) 0 9px,
+      rgba(255, 255, 255, 0.22) 9px 10px,
+      rgba(255, 255, 255, 0) 10px 26px),
+    radial-gradient(70% 60% at 50% 0%, rgba(255, 255, 255, 0.4), transparent 70%);
+  border-top: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 -1px 14px rgba(255, 255, 255, 0.55);
+  animation: seaBreath 9s ease-in-out infinite alternate;
+}
+@keyframes seaBreath {
+  from { opacity: 0.8; }
+  to { opacity: 1; }
+}
+/* 波光の輪も海面の中だけで揺れる */
+.hero__beam::before {
+  inset: 0;
+  background:
+    repeating-radial-gradient(circle at 40% 30%, rgba(255, 255, 255, 0) 0 42px, rgba(255, 255, 255, 0.18) 42px 52px, rgba(255, 255, 255, 0) 52px 104px),
+    repeating-radial-gradient(circle at 66% 70%, rgba(255, 255, 255, 0) 0 56px, rgba(255, 255, 255, 0.14) 56px 68px, rgba(255, 255, 255, 0) 68px 132px);
+  filter: blur(5px);
+}
+/* きらめきcanvasも海面だけに */
+.hero__dust { inset: auto 0 0 0; top: 54.6%; }
+
+/* 文字の点灯からもオレンジを排除(白銀のきらめきに) */
+@keyframes charGlint {
+  0%, 86%, 100% { color: var(--color-text); text-shadow: none; }
+  91% { color: var(--color-accent); text-shadow: 0 0 16px rgba(255, 255, 255, 0.95); }
+}
+
+html.is-motion-off .hero__beam { animation: none !important; }
