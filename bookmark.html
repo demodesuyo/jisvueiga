@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ブックマーク | 自主映画ねっと</title>
+  <meta name="description" content="ブックマークした作品の一覧。">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="ブックマーク | 自主映画ねっと">
+  <meta property="og:description" content="ブックマークした作品の一覧。">
+  <meta property="og:url" content="https://jisyueiga.net/bookmark.html">
+  <meta property="og:image" content="https://jisyueiga.net/ogp.png">
+  <meta property="og:site_name" content="自主映画ねっと">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://jisyueiga.net/bookmark.html">
+  <link rel="icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@700&family=Zen+Kaku+Gothic+New:wght@400;700&family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="p-bookmark">
+
+  <header class="site-header">
+    <a class="site-header__logo" href="index.html">自主映画ねっと</a>
+    <button class="nav-toggle" aria-expanded="false" aria-label="メニューを開く" aria-controls="global-nav">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="global-nav" id="global-nav" aria-label="グローバルナビゲーション">
+      <ul>
+        <li><a href="index.html">トップ</a></li>
+        <li><a href="countries.html">国から探す</a></li>
+        <li><a href="works.html">新着作品</a></li>
+        <li><a href="about.html">このサイトについて</a></li>
+        <li><a href="contact.html" class="nav-cta">作品を教える</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <div class="container">
+        <p class="page-header__en js-reveal">Bookmark</p>
+        <h1 class="page-header__title js-reveal" data-delay="1">ブックマーク</h1>
+      </div>
+    </div>
+
+    <div class="breadcrumb">
+      <div class="container">
+        <ol>
+          <li><a href="index.html">トップ</a></li>
+          <li aria-current="page">ブックマーク</li>
+        </ol>
+      </div>
+    </div>
+
+    <section class="section--tight section">
+      <div class="container">
+        <p class="js-reveal" style="color: var(--color-muted); margin-bottom: 40px;">ブックマークはこのブラウザに保存されます（会員登録は不要です）。</p>
+        <div id="bookmark-list" class="js-reveal" data-delay="1"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <nav class="site-footer__nav" aria-label="フッターナビゲーション">
+        <ul>
+          <li><a href="countries.html">国から探す</a></li>
+          <li><a href="works.html">新着作品</a></li>
+          <li><a href="bookmark.html">ブックマーク</a></li>
+          <li><a href="about.html">このサイトについて</a></li>
+          <li><a href="contact.html">お問い合わせ</a></li>
+          <li><a href="privacy.html">プライバシーポリシー</a></li>
+        </ul>
+      </nav>
+      <p><small>&copy; 2026 自主映画ねっと</small></p>
+    </div>
+  </footer>
+
+  <button class="motion-stop">アニメーションを停止する</button>
+  <script src="main.js" defer></script>
+</body>
+</html>

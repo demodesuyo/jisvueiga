@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>作品を教える・お問い合わせ | 自主映画ねっと</title>
+  <meta name="description" content="作品の推薦・掲載希望・お問い合わせはこちらから。日本語以外の言語でも大丈夫です。">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="作品を教える・お問い合わせ | 自主映画ねっと">
+  <meta property="og:description" content="作品の推薦・掲載希望・お問い合わせはこちらから。日本語以外の言語でも大丈夫です。">
+  <meta property="og:url" content="https://jisyueiga.net/contact.html">
+  <meta property="og:image" content="https://jisyueiga.net/ogp.png">
+  <meta property="og:site_name" content="自主映画ねっと">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://jisyueiga.net/contact.html">
+  <link rel="icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@700&family=Zen+Kaku+Gothic+New:wght@400;700&family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="p-contact">
+
+  <header class="site-header">
+    <a class="site-header__logo" href="index.html">自主映画ねっと</a>
+    <button class="nav-toggle" aria-expanded="false" aria-label="メニューを開く" aria-controls="global-nav">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="global-nav" id="global-nav" aria-label="グローバルナビゲーション">
+      <ul>
+        <li><a href="index.html">トップ</a></li>
+        <li><a href="countries.html">国から探す</a></li>
+        <li><a href="works.html">新着作品</a></li>
+        <li><a href="about.html">このサイトについて</a></li>
+        <li><a href="contact.html" aria-current="page" class="nav-cta">作品を教える</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <div class="container">
+        <p class="page-header__en js-reveal">Contact</p>
+        <h1 class="page-header__title js-reveal" data-delay="1">作品を教える・お問い合わせ</h1>
+      </div>
+    </div>
+
+    <div class="breadcrumb">
+      <div class="container">
+        <ol>
+          <li><a href="index.html">トップ</a></li>
+          <li aria-current="page">お問い合わせ</li>
+        </ol>
+      </div>
+    </div>
+
+    <section class="section--tight section">
+      <div class="container--narrow">
+        <p class="js-reveal" style="color: var(--color-muted); margin-bottom: 40px;">作品の推薦も、監督ご本人からの掲載希望も、このフォームからどうぞ。日本語以外の言語でも大丈夫です（English/other languages welcome）。通常3日以内にお返事します。</p>
+        <!-- 公開時: data-demo を削除し、action にフォームサービス(Formspree等)のURLを設定する。手順はREADME参照 -->
+        <form class="form js-contact-form" action="thanks.html" method="POST" data-demo data-thanks="thanks.html" novalidate>
+
+          <div class="form__field">
+            <label for="topic">ご用件</label>
+            <select id="topic" name="topic" autocomplete="off">
+              <option value="作品の推薦（他薦）">作品の推薦（他薦）</option>
+              <option value="自作の掲載希望（自薦）">自作の掲載希望（自薦）</option>
+              <option value="掲載内容の変更・取り下げ">掲載内容の変更・取り下げ</option>
+              <option value="その他">その他</option>
+            </select>
+          </div>
+
+          <div class="form__field">
+            <label for="name">お名前（ニックネーム可）<span class="required">必須</span></label>
+            <input type="text" id="name" name="name" autocomplete="name" required aria-describedby="name-error">
+            <p class="form__error" id="name-error" data-error-for="name" aria-live="polite"></p>
+          </div>
+
+          <div class="form__field">
+            <label for="email">メールアドレス<span class="required">必須</span></label>
+            <input type="email" id="email" name="email" autocomplete="email" inputmode="email" required aria-describedby="email-error">
+            <p class="form__error" id="email-error" data-error-for="email" aria-live="polite"></p>
+          </div>
+
+          <div class="form__field">
+            <label for="message">内容<span class="required">必須</span></label>
+            <textarea id="message" name="message" rows="8" required aria-describedby="message-error" placeholder="作品の推薦の場合: タイトル / 国 / YouTubeのURL / 推しポイントをお書きください"></textarea>
+            <p class="form__error" id="message-error" data-error-for="message" aria-live="polite"></p>
+          </div>
+
+          <!-- ハニーポット: 削除禁止(スパム対策) -->
+          <div class="form__hp" aria-hidden="true">
+            <label>この欄は入力しないでください<input type="text" name="company_url" tabindex="-1" autocomplete="off"></label>
+          </div>
+
+          <p style="font-size: 13px; color: var(--color-muted);">ご入力いただいた個人情報は、お問い合わせへの回答のためにのみ利用します。詳しくは<a href="privacy.html">プライバシーポリシー</a>をご覧ください。</p>
+
+          <div>
+            <button class="button" type="submit">送信する</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <nav class="site-footer__nav" aria-label="フッターナビゲーション">
+        <ul>
+          <li><a href="countries.html">国から探す</a></li>
+          <li><a href="works.html">新着作品</a></li>
+          <li><a href="bookmark.html">ブックマーク</a></li>
+          <li><a href="about.html">このサイトについて</a></li>
+          <li><a href="contact.html">お問い合わせ</a></li>
+          <li><a href="privacy.html">プライバシーポリシー</a></li>
+        </ul>
+      </nav>
+      <p><small>&copy; 2026 自主映画ねっと</small></p>
+    </div>
+  </footer>
+
+  <button class="motion-stop">アニメーションを停止する</button>
+  <script src="main.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>国から探す | 自主映画ねっと</title>
+  <meta name="description" content="世界の自主映画を国別に探せます。韓国、フランス、ブラジル、インド、ナイジェリア、日本など。">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="国から探す | 自主映画ねっと">
+  <meta property="og:description" content="世界の自主映画を国別に探せます。韓国、フランス、ブラジル、インド、ナイジェリア、日本など。">
+  <meta property="og:url" content="https://jisyueiga.net/countries.html">
+  <meta property="og:image" content="https://jisyueiga.net/ogp.png">
+  <meta property="og:site_name" content="自主映画ねっと">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://jisyueiga.net/countries.html">
+  <link rel="icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@700&family=Zen+Kaku+Gothic+New:wght@400;700&family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="p-countries">
+
+  <header class="site-header">
+    <a class="site-header__logo" href="index.html">自主映画ねっと</a>
+    <button class="nav-toggle" aria-expanded="false" aria-label="メニューを開く" aria-controls="global-nav">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="global-nav" id="global-nav" aria-label="グローバルナビゲーション">
+      <ul>
+        <li><a href="index.html">トップ</a></li>
+        <li><a href="countries.html" aria-current="page">国から探す</a></li>
+        <li><a href="works.html">新着作品</a></li>
+        <li><a href="about.html">このサイトについて</a></li>
+        <li><a href="contact.html" class="nav-cta">作品を教える</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-header">
+      <div class="container">
+        <p class="page-header__en js-reveal">By Country</p>
+        <h1 class="page-header__title js-reveal" data-delay="1">国から探す</h1>
+      </div>
+    </div>
+
+    <div class="breadcrumb">
+      <div class="container">
+        <ol>
+          <li><a href="index.html">トップ</a></li>
+          <li aria-current="page">国から探す</li>
+        </ol>
+      </div>
+    </div>
+
+    <section class="section--tight section" style="padding-bottom: 0;">
+      <div class="container">
+        <p class="js-reveal" style="color: var(--color-muted); margin-bottom: 24px;">気になる国をタップすると、その国の作品へ移動します。（現在はサンプル表示です）</p>
+        <ul class="country-grid js-reveal" data-delay="1">
+          <li><a class="country-chip" href="#c-kr"><span class="flag" aria-hidden="true">🇰🇷</span>韓国<span class="cnt">1</span></a></li>
+          <li><a class="country-chip" href="#c-fr"><span class="flag" aria-hidden="true">🇫🇷</span>フランス<span class="cnt">1</span></a></li>
+          <li><a class="country-chip" href="#c-br"><span class="flag" aria-hidden="true">🇧🇷</span>ブラジル<span class="cnt">1</span></a></li>
+          <li><a class="country-chip" href="#c-in"><span class="flag" aria-hidden="true">🇮🇳</span>インド<span class="cnt">1</span></a></li>
+          <li><a class="country-chip" href="#c-ng"><span class="flag" aria-hidden="true">🇳🇬</span>ナイジェリア<span class="cnt">1</span></a></li>
+          <li><a class="country-chip" href="#c-jp"><span class="flag" aria-hidden="true">🇯🇵</span>日本<span class="cnt">1</span></a></li>
+        </ul>
+      </div>
+    </section>
+    <section class="section--tight section" id="c-kr" style="padding-bottom: 0;">
+      <div class="container">
+        <div class="section-head js-reveal" style="margin-bottom: 24px;">
+          <span class="section-head__en">🇰🇷 韓国</span>
+          <h2 class="section-head__title">韓国の自主映画</h2>
+        </div>
+        <div class="works-grid js-reveal" data-delay="1">
+          <a class="film-card" href="works.html">
+            <div class="film-card__poster"><img src="film-kr.svg" alt="にわか雨（サンプル）" width="960" height="1440" loading="lazy"></div>
+            <p class="film-card__title">にわか雨</p>
+            <p class="film-card__meta">🇰🇷 韓国 — 22 MIN</p>
+          </a>
+        </div>
+      </div>
+    </section>
+    <section class="section--tight section" id="c-fr" style="padding-bottom: 0;">
+      <div class="container">
+        <div class="section-head js-reveal" style="margin-bottom: 24px;">
+          <span class="section-head__en">🇫🇷 フランス</span>
+          <h2 class="section-head__title">フランスの自主映画</h2>
+        </div>
+        <div class="works-grid js-reveal" data-delay="1">
+          <a class="film-card" href="works.html">
+            <div class="film-card__poster"><img src="film-fr.svg" alt="引き潮（サンプル）" width="960" height="1440" loading="lazy"></div>
+            <p class="film-card__title">引き潮</p>
+            <p class="film-card__meta">🇫🇷 フランス — 31 MIN</p>
+          </a>
+        </div>
+      </div>
+    </section>
+    <section class="section--tight section" id="c-br" style="padding-bottom: 0;">
+      <div class="container">
+        <div class="section-head js-reveal" style="margin-bottom: 24px;">
+          <span class="section-head__en">🇧🇷 ブラジル</span>
+          <h2 class="section-head__title">ブラジルの自主映画</h2>
+        </div>
+        <div class="works-grid js-reveal" data-delay="1">
+          <a class="film-card" href="works.html">
+            <div class="film-card__poster"><img src="film-br.svg" alt="青い街（サンプル）" width="960" height="1440" loading="lazy"></div>
+            <p class="film-card__title">青い街</p>
+            <p class="film-card__meta">🇧🇷 ブラジル — 45 MIN</p>
+          </a>
+        </div>
+      </div>
+    </section>
+    <section class="section--tight section" id="c-in" style="padding-bottom: 0;">
+      <div class="container">
+        <div class="section-head js-reveal" style="margin-bottom: 24px;">
+          <span class="section-head__en">🇮🇳 インド</span>
+          <h2 class="section-head__title">インドの自主映画</h2>
+        </div>
+        <div class="works-grid js-reveal" data-delay="1">
+          <a class="film-card" href="works.html">
+            <div class="film-card__poster"><img src="film-in.svg" alt="モンスーンの手紙（サンプル）" width="960" height="1440" loading="lazy"></div>
+            <p class="film-card__title">モンスーンの手紙</p>
+            <p class="film-card__meta">🇮🇳 インド — 38 MIN</p>
+          </a>
+        </div>
+      </div>
+    </section>
+    <section class="section--tight section" id="c-ng" style="padding-bottom: 0;">
+      <div class="container">
+        <div class="section-head js-reveal" style="margin-bottom: 24px;">
+          <span class="section-head__en">🇳🇬 ナイジェリア</span>
+          <h2 class="section-head__title">ナイジェリアの自主映画</h2>
+        </div>
+        <div class="works-grid js-reveal" data-delay="1">
+          <a class="film-card" href="works.html">
+            <div class="film-card__poster"><img src="film-ng.svg" alt="ラゴスの波（サンプル）" width="960" height="1440" loading="lazy"></div>
+            <p class="film-card__title">ラゴスの波</p>
+            <p class="film-card__meta">🇳🇬 ナイジェリア — 27 MIN</p>
+          </a>
+        </div>
+      </div>
+    </section>
+    <section class="section--tight section" id="c-jp" style="padding-bottom: 0;">
+      <div class="container">
+        <div class="section-head js-reveal" style="margin-bottom: 24px;">
+          <span class="section-head__en">🇯🇵 日本</span>
+          <h2 class="section-head__title">日本の自主映画</h2>
+        </div>
+        <div class="works-grid js-reveal" data-delay="1">
+          <a class="film-card" href="works.html">
+            <div class="film-card__poster"><img src="film-jp.svg" alt="港町シネマ（サンプル）" width="960" height="1440" loading="lazy"></div>
+            <p class="film-card__title">港町シネマ</p>
+            <p class="film-card__meta">🇯🇵 日本 — 19 MIN</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container js-reveal">
+        <div class="sister">
+          <div>
+            <h2>あなたの国の傑作、教えてください。</h2>
+            <p>「—」の国はこれから開拓する海域です。自薦・他薦をお待ちしています。</p>
+          </div>
+          <a class="button" href="contact.html">作品を教える</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <nav class="site-footer__nav" aria-label="フッターナビゲーション">
+        <ul>
+          <li><a href="countries.html">国から探す</a></li>
+          <li><a href="works.html">新着作品</a></li>
+          <li><a href="bookmark.html">ブックマーク</a></li>
+          <li><a href="about.html">このサイトについて</a></li>
+          <li><a href="contact.html">お問い合わせ</a></li>
+          <li><a href="privacy.html">プライバシーポリシー</a></li>
+        </ul>
+      </nav>
+      <p><small>&copy; 2026 自主映画ねっと</small></p>
+    </div>
+  </footer>
+
+  <button class="motion-stop">アニメーションを停止する</button>
+  <script src="main.js" defer></script>
+</body>
+</html>
