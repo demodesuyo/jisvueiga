@@ -855,3 +855,76 @@ html.is-motion-off .hero__beam::before { animation: none !important; }
 }
 
 html.is-motion-off .hero__beam { animation: none !important; }
+
+/* ---------- 12. 水中の光へ(v1.3): 境界線なしの青+ゴッドレイ ---------- */
+.hero {
+  /* なめらかに深くなる一続きの青(段差なし) */
+  background: linear-gradient(180deg,
+    #8ec4de 0%, #5da3c7 22%, #3c86af 45%, #2a6d9a 66%, #1e5a86 84%, #1a5078 100%);
+}
+/* 水面の光と光の柱(ゴッドレイ) */
+.hero__beam {
+  inset: 0; top: 0;
+  border-top: none; box-shadow: none;
+  background: radial-gradient(52% 40% at 50% -8%,
+    rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.16) 46%, transparent 72%);
+  animation: seaBreath 9s ease-in-out infinite alternate;
+}
+.hero__beam::before {
+  inset: -12% -8%;
+  filter: blur(2px);
+  background: repeating-linear-gradient(76deg,
+    transparent 0 110px,
+    rgba(255, 255, 255, 0.12) 110px 142px,
+    transparent 142px 300px);
+  -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,0.95), rgba(0,0,0,0.35) 45%, transparent 78%);
+  mask-image: linear-gradient(180deg, rgba(0,0,0,0.95), rgba(0,0,0,0.35) 45%, transparent 78%);
+  animation: raysA 13s ease-in-out infinite alternate;
+}
+.hero__beam::after {
+  content: "";
+  position: absolute; inset: -12% -8%;
+  filter: blur(4px);
+  background: repeating-linear-gradient(86deg,
+    transparent 0 150px,
+    rgba(255, 255, 255, 0.09) 150px 200px,
+    transparent 200px 380px);
+  -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,0.9), rgba(0,0,0,0.3) 50%, transparent 82%);
+  mask-image: linear-gradient(180deg, rgba(0,0,0,0.9), rgba(0,0,0,0.3) 50%, transparent 82%);
+  animation: raysB 17s ease-in-out infinite alternate-reverse;
+}
+@keyframes raysA {
+  from { transform: translateX(0); opacity: 0.75; }
+  to { transform: translateX(-3%); opacity: 1; }
+}
+@keyframes raysB {
+  from { transform: translateX(0); opacity: 0.6; }
+  to { transform: translateX(2.5%); opacity: 0.95; }
+}
+/* 泡と魚のcanvasはヒーロー全面に */
+.hero__dust { inset: 0; top: 0; }
+
+/* 水中では文字は白 */
+.hero__title, .hero__title .char { color: #ffffff; }
+.hero__lead { color: rgba(255, 255, 255, 0.88); }
+.hero__en, .hero__scroll { color: #cfeaf4; }
+.hero__sub-link { color: #ffffff; text-decoration-color: rgba(255, 255, 255, 0.7); }
+.hero .button {
+  background: #ffffff; border-color: #ffffff; color: var(--color-accent);
+  box-shadow: 0 10px 26px rgba(10, 40, 65, 0.3);
+}
+.hero .button:hover { background: transparent; color: #ffffff; }
+.hero .utility-nav a { background: rgba(255, 255, 255, 0.9); }
+@keyframes charGlint {
+  0%, 86%, 100% { color: #ffffff; text-shadow: none; }
+  91% { color: #ffffff; text-shadow: 0 0 20px rgba(255, 255, 255, 0.95), 0 0 34px rgba(191, 232, 240, 0.8); }
+}
+
+/* 波の縁: 手前はページ色のまま、奥の波は白い泡に */
+.hero::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 64' preserveAspectRatio='none'%3E%3Cpath d='M0 34 Q 150 10 300 30 T 600 30 T 900 34 T 1200 26 L 1200 64 L 0 64 Z' fill='%23ffffff' fill-opacity='0.35'/%3E%3C/svg%3E");
+}
+
+html.is-motion-off .hero__beam,
+html.is-motion-off .hero__beam::before,
+html.is-motion-off .hero__beam::after { animation: none !important; }

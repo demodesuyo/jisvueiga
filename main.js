@@ -151,80 +151,158 @@ function initChars() {
   });
 }
 
-/* ---- 海面のきらめき(v1.2): 水平線下に太陽の「光の道」。白のみ ---- */
+/* ---- 水中の生きものと泡(v1.3): 泡・小魚の群れ・イルカ ---- */
 function initDust() {
   const canvas = document.querySelector(".hero__dust");
   if (!canvas) return;
   const ctx = canvas.getContext("2d");
-  let w, h, dpr, glints, raf;
+  let w, h, dpr, bubbles, schools, dolphin, raf;
 
-  const COUNT = window.matchMedia("(max-width: 767px)").matches ? 90 : 160;
-  const PATH_X = 0.62;   // 光の道の中心(横位置)
+  const SP = window.matchMedia("(max-width: 767px)").matches;
+
+  // イルカのシルエット(100x40の座標系, 鼻先が左)
+  const DOLPHIN = new Path2D(
+    "M0 24 C 14 12 26 8 40 8 C 44 8 46 7 48 3 C 52 1 54 2 53 6 " +
+    "C 52 9 50 10 47 11 C 62 12 76 14 88 17 C 92 12 96 8 100 7 " +
+    "C 97 13 95 16 94 19 C 96 22 99 26 100 31 C 95 29 90 25 87 22 " +
+    "C 74 24 60 26 46 26 C 44 30 40 34 34 36 C 36 32 37 29 37 27 " +
+    "C 24 27 10 26 0 24 Z"
+  );
 
   function resize() {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
     w = canvas.offsetWidth;
-    h = canvas.offsetHeight;   // canvasは水平線から下だけを覆う
+    h = canvas.offsetHeight;
     canvas.width = w * dpr;
     canvas.height = h * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
-  function spawn() {
-    // 水平線に近いほど密集し、遠ざかるほど光の道が広がる
-    const d = Math.pow(Math.random(), 1.7);        // 0=水平線際に偏る
-    const y = d * h;
-    const spread = 0.06 + d * 0.3;                  // 遠近: 下ほど道幅が広い
-    const onPath = Math.random() < 0.8;
-    const x = onPath
-      ? w * (PATH_X + (Math.random() - 0.5) * spread)
-      : w * Math.random();
+  function spawnBubble(fromBottom) {
     return {
-      x, y,
-      len: (1.5 + Math.random() * 5) * (0.5 + d),   // 横長のグリント
+      x: Math.random() * w,
+      y: fromBottom ? h + 6 : Math.random() * h,
+      r: 0.8 + Math.random() * 2.2,
+      vy: 0.25 + Math.random() * 0.5,
       a: Math.random() * Math.PI * 2,
-      s: 0.012 + Math.random() * 0.04,
-      base: onPath ? 0.5 : 0.2,
+      s: 0.02 + Math.random() * 0.03,
     };
   }
 
-  function tick() {
+  function spawnSchool(dir) {
+    const n = 5 + Math.floor(Math.random() * 4);
+    return {
+      dir,                                    // 1=右へ, -1=左へ
+      x: dir === 1 ? -80 : w + 80,
+      y: h * (0.25 + Math.random() * 0.55),
+      v: (0.35 + Math.random() * 0.25) * dir,
+      fish: Array.from({ length: n }, () => ({
+        ox: Math.random() * 70,
+        oy: (Math.random() - 0.5) * 46,
+        size: 5 + Math.random() * 4,
+        ph: Math.random() * Math.PI * 2,
+      })),
+    };
+  }
+
+  function drawFish(x, y, size, dir, wag) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(dir, 1);
+    ctx.fillStyle = "rgba(12, 42, 66, 0.5)";
+    ctx.beginPath();
+    ctx.ellipse(0, 0, size, size * 0.38, 0, 0, Math.PI * 2);
+    ctx.moveTo(-size * 0.8, 0);
+    ctx.lineTo(-size * 1.5, -size * 0.5 * wag);
+    ctx.lineTo(-size * 1.5, size * 0.5 * wag);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function newDolphin() {
+    const dir = Math.random() < 0.5 ? 1 : -1;
+    return {
+      active: false,
+      wait: (SP ? 7 : 5) + Math.random() * 8,   // 秒
+      dir,
+      x: 0, t: 0,
+      dur: 9 + Math.random() * 3,
+      y0: h * (0.3 + Math.random() * 0.35),
+      amp: 26 + Math.random() * 22,
+      size: SP ? 0.7 : 1.0,
+    };
+  }
+
+  function tick(now) {
     if (document.documentElement.classList.contains("is-motion-off")) {
       ctx.clearRect(0, 0, w, h);
       raf = requestAnimationFrame(tick);
       return;
     }
     ctx.clearRect(0, 0, w, h);
-    for (const p of glints) {
-      p.a += p.s * 60;
-      p.x += 0.05;
-      if (p.x > w + 12) Object.assign(p, spawn(), { x: -8 });
-      const tw = Math.abs(Math.sin(p.a));
-      const alpha = p.base * (0.15 + tw * 0.85);
-      // 海のきらめきは横に細長い
-      ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
-      ctx.lineWidth = 1.1;
+
+    // 泡
+    for (const b of bubbles) {
+      b.y -= b.vy;
+      b.a += b.s * 60;
+      b.x += Math.sin(b.a) * 0.25;
+      if (b.y < -8) Object.assign(b, spawnBubble(true));
       ctx.beginPath();
-      ctx.moveTo(p.x - p.len, p.y);
-      ctx.lineTo(p.x + p.len, p.y);
+      ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.4)";
+      ctx.lineWidth = 0.8;
       ctx.stroke();
-      // 最も強い瞬間だけ小さな十字
-      if (tw > 0.99) {
-        ctx.beginPath();
-        ctx.moveTo(p.x, p.y - p.len * 0.6);
-        ctx.lineTo(p.x, p.y + p.len * 0.6);
-        ctx.stroke();
+    }
+
+    // 小魚の群れ
+    for (const sc of schools) {
+      sc.x += sc.v;
+      if ((sc.dir === 1 && sc.x > w + 140) || (sc.dir === -1 && sc.x < -140)) {
+        Object.assign(sc, spawnSchool(sc.dir));
+      }
+      for (const f of sc.fish) {
+        f.ph += 0.09;
+        const fx = sc.x + f.ox * sc.dir;
+        const fy = sc.y + f.oy + Math.sin(f.ph) * 3;
+        drawFish(fx, fy, f.size, sc.dir, 0.7 + Math.sin(f.ph * 2) * 0.3);
       }
     }
+
+    // イルカ: ときどき画面を横切る
+    dolphin.t += 1 / 60;
+    if (!dolphin.active) {
+      if (dolphin.t > dolphin.wait) { dolphin.active = true; dolphin.t = 0; }
+    } else {
+      const p = dolphin.t / dolphin.dur;
+      if (p >= 1) { dolphin = newDolphin(); }
+      else {
+        const x = dolphin.dir === 1 ? -140 + p * (w + 280) : w + 140 - p * (w + 280);
+        const y = dolphin.y0 + Math.sin(p * Math.PI * 2) * dolphin.amp;
+        const slope = Math.cos(p * Math.PI * 2) * dolphin.amp * (Math.PI * 2) / (w + 280);
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(Math.atan(slope) * dolphin.dir);
+        ctx.scale(dolphin.dir * dolphin.size, dolphin.size);
+        ctx.translate(-50, -20);
+        ctx.fillStyle = "rgba(10, 38, 62, 0.55)";
+        ctx.fill(DOLPHIN);
+        ctx.restore();
+      }
+    }
+
     raf = requestAnimationFrame(tick);
   }
 
+  function build() {
+    bubbles = Array.from({ length: SP ? 26 : 44 }, () => spawnBubble(false));
+    schools = [spawnSchool(1), spawnSchool(-1)];
+    dolphin = newDolphin();
+  }
+
   resize();
-  glints = Array.from({ length: COUNT }, spawn);
-  window.addEventListener("resize", () => {
-    resize();
-    glints = Array.from({ length: COUNT }, spawn);
-  }, { passive: true });
+  build();
+  window.addEventListener("resize", () => { resize(); build(); }, { passive: true });
 
   const io = new IntersectionObserver(([e]) => {
     if (e.isIntersecting) {
