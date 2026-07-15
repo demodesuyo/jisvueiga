@@ -252,7 +252,7 @@ function initDust() {
     const which = Math.random() < blend ? idxB : idxA;
     const name = SEASONS[which].name;
     const base = { type: name, x: Math.random() * w, ph: Math.random() * Math.PI * 2 };
-    if (name === "spring") return { ...base, y: -12, r: 4 + Math.random() * 3.5,
+    if (name === "spring") return { ...base, y: -12, r: 5.5 + Math.random() * 4.5,
       vy: 0.5 + Math.random() * 0.6, rot: Math.random() * Math.PI, vr: (Math.random() - 0.5) * 0.06,
       color: `rgba(${238 + Math.random() * 12}, ${150 + Math.random() * 30}, ${175 + Math.random() * 25}, 0.8)` };
     if (name === "summer") return { ...base, y: h + 10, r: 1.2 + Math.random() * 2.2,
@@ -266,12 +266,18 @@ function initDust() {
 
   function drawPart(p, t) {
     if (p.type === "spring") {
+      const r = p.r;
       ctx.save();
       ctx.translate(p.x, p.y);
       ctx.rotate(p.rot);
       ctx.fillStyle = p.color;
       ctx.beginPath();
-      ctx.ellipse(0, 0, p.r, p.r * 0.62, 0, 0, Math.PI * 2);
+      ctx.moveTo(0, r);                                              // 基部(すぼまり)
+      ctx.bezierCurveTo(-r * 0.85, r * 0.55, -r * 0.95, -r * 0.45, -r * 0.34, -r * 0.86); // 左の縁
+      ctx.quadraticCurveTo(-r * 0.13, -r * 1.0, 0, -r * 0.58);       // 切れ込み(左斜面)
+      ctx.quadraticCurveTo(r * 0.13, -r * 1.0, r * 0.34, -r * 0.86); // 切れ込み(右斜面)
+      ctx.bezierCurveTo(r * 0.95, -r * 0.45, r * 0.85, r * 0.55, 0, r); // 右の縁
+      ctx.closePath();
       ctx.fill();
       ctx.restore();
     } else if (p.type === "summer") {
