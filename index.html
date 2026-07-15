@@ -49,23 +49,23 @@
 
   <main>
     <!-- ヒーロー: 海面のきらめき(シグネチャー) -->
-    <section class="hero">
+    <section class="hero" data-season="spring">
       <div class="hero__beam" aria-hidden="true"></div>
       <canvas class="hero__dust" aria-hidden="true"></canvas>
       <div class="container hero__inner">
         <p class="hero__en js-reveal">Global Indie Film Guide</p>
         <h1 class="hero__title js-reveal" data-delay="1" data-chars>自主映画ねっと</h1>
-        <p class="hero__lead js-reveal" data-delay="2">世界中のYouTubeで公開されている自主映画を、国別に、日本語の紹介つきで。言葉の壁のむこうの才能に出会える海図です。</p>
+        <p class="hero__lead js-reveal" data-delay="2">世界中のYouTubeで公開されている自主映画を、国別に、日本語の紹介つきで。季節がめぐるように、世界の才能と出会える場所です。</p>
         <div class="hero__actions js-reveal" data-delay="3">
           <a class="button" href="countries.html">国から探す</a>
           <a class="hero__sub-link" href="about.html">このサイトについて</a>
         </div>
       </div>
-      <p class="hero__scroll" aria-hidden="true">DIVE IN</p>
+      <p class="hero__scroll" aria-hidden="true">SCROLL</p>
     </section>
 
     <!-- 課題共感 -->
-    <section class="section">
+    <section class="section" data-season="summer">
       <div class="container--narrow">
         <div class="section-head js-reveal">
           <span class="section-head__en">Why</span>
@@ -97,12 +97,12 @@
           <li><a class="country-chip" href="countries.html"><span class="flag" aria-hidden="true">🇮🇷</span>イラン<span class="cnt">—</span></a></li>
           <li><a class="country-chip" href="countries.html"><span class="flag" aria-hidden="true">🇰🇪</span>ケニア<span class="cnt">—</span></a></li>
         </ul>
-        <p class="js-reveal" style="margin-top: 20px; font-size: 13px; color: var(--color-muted);">※ 作品数はサンプル表示です。「—」の国はこれから開拓する海域。</p>
+        <p class="js-reveal" style="margin-top: 20px; font-size: 13px; color: var(--color-muted);">※ 作品数はサンプル表示です。「—」の国はこれから作品を探しに行く場所。</p>
       </div>
     </section>
 
     <!-- 新着作品 -->
-    <section class="filmstrip-band">
+    <section class="filmstrip-band" data-season="autumn">
       <div class="container">
         <div class="section-head js-reveal" style="margin-bottom: 24px;">
           <span class="section-head__en">New Arrivals</span>
@@ -171,7 +171,7 @@
     </section>
 
     <!-- 姉妹サイト -->
-    <section class="section" style="padding-top: 0;">
+    <section class="section" data-season="winter" style="padding-top: 0;">
       <div class="container">
         <div class="sister js-reveal">
           <div>
@@ -187,7 +187,7 @@
     <!-- CTAバンド -->
     <section class="cta-band">
       <div class="container">
-        <h2 class="section-head__title js-reveal">この海の、まだ名前のない傑作を教えてください。</h2>
+        <h2 class="section-head__title js-reveal">世界のどこかの、まだ名前のない傑作を教えてください。</h2>
         <p class="js-reveal" data-delay="1">自薦・他薦、どちらも歓迎です。言語は問いません。</p>
         <a class="button js-reveal" data-delay="2" href="contact.html">作品を教える</a>
       </div>

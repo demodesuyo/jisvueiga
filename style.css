@@ -928,3 +928,58 @@ html.is-motion-off .hero__beam { animation: none !important; }
 html.is-motion-off .hero__beam,
 html.is-motion-off .hero__beam::before,
 html.is-motion-off .hero__beam::after { animation: none !important; }
+
+/* ---------- 13. 日本の四季(v2.0): スクロールで春→夏→秋→冬 ---------- */
+/* 背景はJSが注入する固定レイヤー2枚のクロスフェードで表現 */
+body { background: #fef7f9; }
+.season-bg, .season-bg__a, .season-bg__b {
+  position: fixed; inset: 0; pointer-events: none;
+}
+.season-bg { z-index: -2; }
+.season-bg__b { opacity: 0; }
+.season-canvas {
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+}
+
+/* 海仕様を解除して、淡い陽の光だけ残す */
+.hero { background: transparent; padding-bottom: calc(var(--space) * 12); }
+.hero::before, .hero::after { content: none; }
+.hero__beam, .hero__beam::before, .hero__beam::after {
+  animation: none; background: none; filter: none;
+  -webkit-mask-image: none; mask-image: none;
+}
+.hero__beam {
+  background: radial-gradient(56% 42% at 68% -6%,
+    rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.2) 48%, transparent 72%);
+}
+.hero__dust { display: none; }
+
+/* 文字色を明るい背景用に戻す */
+.hero__title, .hero__title .char { color: var(--color-text); }
+.hero__lead { color: var(--color-muted); }
+.hero__en, .hero__scroll { color: var(--color-accent); }
+.hero__sub-link { color: var(--color-text); text-decoration-color: var(--color-accent); }
+.hero .button {
+  background: var(--color-accent); border-color: var(--color-accent); color: #ffffff;
+  box-shadow: 0 8px 22px rgb(var(--accent-rgb, 194 80 109) / 0.3);
+}
+.hero .button:hover { background: transparent; color: var(--color-accent); }
+@keyframes charGlint {
+  0%, 86%, 100% { color: var(--color-text); text-shadow: none; }
+  91% { color: var(--color-accent); text-shadow: 0 0 16px rgb(var(--accent-rgb, 194 80 109) / 0.55); }
+}
+
+/* 差し色は季節に合わせてJSがなめらかに変える */
+.button { box-shadow: 0 8px 22px rgb(var(--accent-rgb, 194 80 109) / 0.28); }
+.button:hover { box-shadow: 0 8px 26px rgb(var(--accent-rgb, 194 80 109) / 0.2); }
+.bm-btn.is-on { box-shadow: 0 0 14px rgb(var(--accent-rgb, 194 80 109) / 0.4); }
+.utility-nav a { background: rgba(255, 255, 255, 0.82); }
+.site-header.is-scrolled { background: rgba(255, 255, 255, 0.9); }
+
+/* 面の白は少し透かして季節の色をまとわせる */
+.filmstrip-band { background: rgba(255, 255, 255, 0.72); backdrop-filter: blur(2px); }
+.steps li, .faq details, .country-chip, .rank-list li {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+html.is-motion-off .season-canvas { display: none; }

@@ -151,87 +151,187 @@ function initChars() {
   });
 }
 
-/* ---- 水中の生きものと泡(v1.3): 泡・小魚の群れ・イルカ ---- */
+/* ---- 日本の四季(v2.0): スクロールで春→夏→秋→冬 ----
+   [data-season]セクションの位置から現在の季節を割り出し、
+   背景・差し色・舞う粒をなめらかにクロスフェードする。
+   下層ページ(マーカーなし)は今日の日付の季節で固定。 */
+const SEASONS = [
+  { name: "spring", grad: ["#fef7f9", "#fdeef3", "#fbe4ec"], accent: [194, 80, 109] },
+  { name: "summer", grad: ["#eef8ff", "#e9f6ea", "#f5f1d6"], accent: [47, 125, 79] },
+  { name: "autumn", grad: ["#fdf8f0", "#f9edda", "#f5e0c4"], accent: [176, 84, 28] },
+  { name: "winter", grad: ["#f4f8fb", "#edf3f8", "#e6edf5"], accent: [63, 111, 150] },
+];
+
+function gradCss(g) {
+  return `linear-gradient(180deg, ${g[0]} 0%, ${g[1]} 50%, ${g[2]} 100%)`;
+}
+
 function initDust() {
-  const canvas = document.querySelector(".hero__dust");
-  if (!canvas) return;
+  // 背景レイヤーとcanvasを全ページに注入
+  const bg = document.createElement("div");
+  bg.className = "season-bg";
+  bg.setAttribute("aria-hidden", "true");
+  bg.innerHTML = '<div class="season-bg__a"></div><div class="season-bg__b"></div>';
+  document.body.prepend(bg);
+  const layerA = bg.querySelector(".season-bg__a");
+  const layerB = bg.querySelector(".season-bg__b");
+
+  const canvas = document.createElement("canvas");
+  canvas.className = "season-canvas";
+  canvas.setAttribute("aria-hidden", "true");
+  document.body.prepend(canvas);
   const ctx = canvas.getContext("2d");
-  let w, h, dpr, bubbles, schools, dolphin, raf;
 
+  let w, h, dpr, raf;
   const SP = window.matchMedia("(max-width: 767px)").matches;
-
-  // イルカのシルエット(100x40の座標系, 鼻先が左)
-  const DOLPHIN = new Path2D(
-    "M0 24 C 14 12 26 8 40 8 C 44 8 46 7 48 3 C 52 1 54 2 53 6 " +
-    "C 52 9 50 10 47 11 C 62 12 76 14 88 17 C 92 12 96 8 100 7 " +
-    "C 97 13 95 16 94 19 C 96 22 99 26 100 31 C 95 29 90 25 87 22 " +
-    "C 74 24 60 26 46 26 C 44 30 40 34 34 36 C 36 32 37 29 37 27 " +
-    "C 24 27 10 26 0 24 Z"
-  );
+  const MAX = SP ? 44 : 78;
 
   function resize() {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
-    w = canvas.offsetWidth;
-    h = canvas.offsetHeight;
+    w = window.innerWidth;
+    h = window.innerHeight;
     canvas.width = w * dpr;
     canvas.height = h * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
-  function spawnBubble(fromBottom) {
-    return {
-      x: Math.random() * w,
-      y: fromBottom ? h + 6 : Math.random() * h,
-      r: 0.8 + Math.random() * 2.2,
-      vy: 0.25 + Math.random() * 0.5,
-      a: Math.random() * Math.PI * 2,
-      s: 0.02 + Math.random() * 0.03,
-    };
+  // --- 季節ブレンドの算出 ---
+  const markers = [...document.querySelectorAll("[data-season]")];
+  const order = { spring: 0, summer: 1, autumn: 2, winter: 3 };
+  let idxA = 0, idxB = 0, blend = 0; // 現在: A→B へ blend(0..1)
+
+  function seasonByDate() {
+    const m = new Date().getMonth() + 1;
+    if (m >= 3 && m <= 5) return 0;
+    if (m >= 6 && m <= 8) return 1;
+    if (m >= 9 && m <= 11) return 2;
+    return 3;
   }
 
-  function spawnSchool(dir) {
-    const n = 5 + Math.floor(Math.random() * 4);
-    return {
-      dir,                                    // 1=右へ, -1=左へ
-      x: dir === 1 ? -80 : w + 80,
-      y: h * (0.25 + Math.random() * 0.55),
-      v: (0.35 + Math.random() * 0.25) * dir,
-      fish: Array.from({ length: n }, () => ({
-        ox: Math.random() * 70,
-        oy: (Math.random() - 0.5) * 46,
-        size: 5 + Math.random() * 4,
-        ph: Math.random() * Math.PI * 2,
-      })),
-    };
+  function computeBlend() {
+    if (!markers.length) {
+      idxA = idxB = seasonByDate();
+      blend = 0;
+      return;
+    }
+    const ref = window.scrollY + h * 0.45;
+    const zones = markers.map((el) => ({
+      s: order[el.dataset.season] ?? 0,
+      top: el.offsetTop,
+    }));
+    let cur = zones[0], next = null;
+    for (let k = 0; k < zones.length; k++) {
+      if (ref >= zones[k].top) { cur = zones[k]; next = zones[k + 1] || null; }
+    }
+    idxA = cur.s;
+    if (next && next.s !== cur.s) {
+      const FADE = h * 0.5; // 境界の手前50vhかけて移り変わる
+      const d = next.top - ref;
+      idxB = next.s;
+      blend = Math.min(Math.max(1 - d / FADE, 0), 1);
+    } else {
+      idxB = idxA;
+      blend = 0;
+    }
   }
 
-  function drawFish(x, y, size, dir, wag) {
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.scale(dir, 1);
-    ctx.fillStyle = "rgba(12, 42, 66, 0.5)";
-    ctx.beginPath();
-    ctx.ellipse(0, 0, size, size * 0.38, 0, 0, Math.PI * 2);
-    ctx.moveTo(-size * 0.8, 0);
-    ctx.lineTo(-size * 1.5, -size * 0.5 * wag);
-    ctx.lineTo(-size * 1.5, size * 0.5 * wag);
-    ctx.closePath();
-    ctx.fill();
-    ctx.restore();
+  function applyBlend() {
+    layerA.style.background = gradCss(SEASONS[idxA].grad);
+    layerB.style.background = gradCss(SEASONS[idxB].grad);
+    layerB.style.opacity = String(blend);
+    const a = SEASONS[idxA].accent, b = SEASONS[idxB].accent;
+    const c = a.map((v, k) => Math.round(v + (b[k] - v) * blend));
+    const root = document.documentElement.style;
+    root.setProperty("--color-accent", `rgb(${c[0]}, ${c[1]}, ${c[2]})`);
+    root.setProperty("--accent-rgb", `${c[0]} ${c[1]} ${c[2]}`);
   }
 
-  function newDolphin() {
-    const dir = Math.random() < 0.5 ? 1 : -1;
-    return {
-      active: false,
-      wait: (SP ? 7 : 5) + Math.random() * 8,   // 秒
-      dir,
-      x: 0, t: 0,
-      dur: 9 + Math.random() * 3,
-      y0: h * (0.3 + Math.random() * 0.35),
-      amp: 26 + Math.random() * 22,
-      size: SP ? 0.7 : 1.0,
-    };
+  // --- 季節の粒 ---
+  const parts = [];
+  function spawnPart() {
+    const which = Math.random() < blend ? idxB : idxA;
+    const name = SEASONS[which].name;
+    const base = { type: name, x: Math.random() * w, ph: Math.random() * Math.PI * 2 };
+    if (name === "spring") return { ...base, y: -12, r: 4 + Math.random() * 3.5,
+      vy: 0.5 + Math.random() * 0.6, rot: Math.random() * Math.PI, vr: (Math.random() - 0.5) * 0.06,
+      color: `rgba(${238 + Math.random() * 12}, ${150 + Math.random() * 30}, ${175 + Math.random() * 25}, 0.8)` };
+    if (name === "summer") return { ...base, y: h + 10, r: 1.2 + Math.random() * 2.2,
+      vy: -(0.2 + Math.random() * 0.35) };                       // 木漏れ日の光の粒(上昇)
+    if (name === "autumn") return { ...base, y: -14, r: 5 + Math.random() * 4,
+      vy: 0.7 + Math.random() * 0.7, rot: Math.random() * Math.PI, vr: (Math.random() - 0.5) * 0.1,
+      color: ["rgba(201,102,45,0.85)", "rgba(214,138,51,0.85)", "rgba(176,74,34,0.85)"][Math.floor(Math.random() * 3)] };
+    return { ...base, y: -8, r: 1 + Math.random() * 2.4,          // winter
+      vy: 0.35 + Math.random() * 0.5 };
+  }
+
+  function drawPart(p, t) {
+    if (p.type === "spring") {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, p.r, p.r * 0.62, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    } else if (p.type === "summer") {
+      const tw = 0.25 + Math.abs(Math.sin(p.ph)) * 0.45;
+      ctx.fillStyle = `rgba(246, 214, 110, ${tw})`;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+    } else if (p.type === "autumn") {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.beginPath();                       // 先のとがった木の葉
+      ctx.moveTo(0, -p.r);
+      ctx.quadraticCurveTo(p.r * 0.9, 0, 0, p.r);
+      ctx.quadraticCurveTo(-p.r * 0.9, 0, 0, -p.r);
+      ctx.fill();
+      ctx.restore();
+    } else {
+      ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  // 夏だけ、画面の下でゆれる向日葵
+  const flowers = Array.from({ length: SP ? 4 : 7 }, (_, k) => ({
+    fx: (k + 0.5 + Math.random() * 0.3) / (SP ? 4.4 : 7.4),
+    hgt: 46 + Math.random() * 42,
+    size: 11 + Math.random() * 7,
+    ph: Math.random() * Math.PI * 2,
+  }));
+  function drawSunflowers(alpha, t) {
+    for (const f of flowers) {
+      const x = f.fx * w + Math.sin(t / 1400 + f.ph) * 4;
+      const yBase = h + 4, yHead = h - f.hgt;
+      ctx.strokeStyle = `rgba(64, 122, 66, ${0.75 * alpha})`;
+      ctx.lineWidth = 2.4;
+      ctx.beginPath();
+      ctx.moveTo(f.fx * w, yBase);
+      ctx.quadraticCurveTo(f.fx * w, yHead + f.hgt * 0.5, x, yHead);
+      ctx.stroke();
+      for (let k = 0; k < 12; k++) {                 // 花びら
+        const ang = (k / 12) * Math.PI * 2 + Math.sin(t / 1400 + f.ph) * 0.05;
+        ctx.save();
+        ctx.translate(x, yHead);
+        ctx.rotate(ang);
+        ctx.fillStyle = `rgba(244, 196, 48, ${0.92 * alpha})`;
+        ctx.beginPath();
+        ctx.ellipse(f.size * 0.95, 0, f.size * 0.52, f.size * 0.2, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+      ctx.fillStyle = `rgba(112, 74, 34, ${0.95 * alpha})`;
+      ctx.beginPath();
+      ctx.arc(x, yHead, f.size * 0.42, 0, Math.PI * 2);
+      ctx.fill();
+    }
   }
 
   function tick(now) {
@@ -240,78 +340,31 @@ function initDust() {
       raf = requestAnimationFrame(tick);
       return;
     }
+    computeBlend();
+    applyBlend();
+
     ctx.clearRect(0, 0, w, h);
-
-    // 泡
-    for (const b of bubbles) {
-      b.y -= b.vy;
-      b.a += b.s * 60;
-      b.x += Math.sin(b.a) * 0.25;
-      if (b.y < -8) Object.assign(b, spawnBubble(true));
-      ctx.beginPath();
-      ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.4)";
-      ctx.lineWidth = 0.8;
-      ctx.stroke();
+    while (parts.length < MAX) parts.push(spawnPart());
+    for (let k = parts.length - 1; k >= 0; k--) {
+      const p = parts[k];
+      p.ph += 0.02;
+      p.y += p.vy;
+      p.x += Math.sin(p.ph) * (p.type === "summer" ? 0.2 : 0.6);
+      if (p.rot !== undefined) p.rot += p.vr;
+      if (p.y > h + 20 || p.y < -24) { parts.splice(k, 1); continue; }
+      drawPart(p, now);
     }
-
-    // 小魚の群れ
-    for (const sc of schools) {
-      sc.x += sc.v;
-      if ((sc.dir === 1 && sc.x > w + 140) || (sc.dir === -1 && sc.x < -140)) {
-        Object.assign(sc, spawnSchool(sc.dir));
-      }
-      for (const f of sc.fish) {
-        f.ph += 0.09;
-        const fx = sc.x + f.ox * sc.dir;
-        const fy = sc.y + f.oy + Math.sin(f.ph) * 3;
-        drawFish(fx, fy, f.size, sc.dir, 0.7 + Math.sin(f.ph * 2) * 0.3);
-      }
-    }
-
-    // イルカ: ときどき画面を横切る
-    dolphin.t += 1 / 60;
-    if (!dolphin.active) {
-      if (dolphin.t > dolphin.wait) { dolphin.active = true; dolphin.t = 0; }
-    } else {
-      const p = dolphin.t / dolphin.dur;
-      if (p >= 1) { dolphin = newDolphin(); }
-      else {
-        const x = dolphin.dir === 1 ? -140 + p * (w + 280) : w + 140 - p * (w + 280);
-        const y = dolphin.y0 + Math.sin(p * Math.PI * 2) * dolphin.amp;
-        const slope = Math.cos(p * Math.PI * 2) * dolphin.amp * (Math.PI * 2) / (w + 280);
-        ctx.save();
-        ctx.translate(x, y);
-        ctx.rotate(Math.atan(slope) * dolphin.dir);
-        ctx.scale(dolphin.dir * dolphin.size, dolphin.size);
-        ctx.translate(-50, -20);
-        ctx.fillStyle = "rgba(10, 38, 62, 0.55)";
-        ctx.fill(DOLPHIN);
-        ctx.restore();
-      }
-    }
+    const wSummer = (idxA === 1 ? 1 - blend : 0) + (idxB === 1 ? blend : 0);
+    if (wSummer > 0.05) drawSunflowers(wSummer, now);
 
     raf = requestAnimationFrame(tick);
   }
 
-  function build() {
-    bubbles = Array.from({ length: SP ? 26 : 44 }, () => spawnBubble(false));
-    schools = [spawnSchool(1), spawnSchool(-1)];
-    dolphin = newDolphin();
-  }
-
   resize();
-  build();
-  window.addEventListener("resize", () => { resize(); build(); }, { passive: true });
-
-  const io = new IntersectionObserver(([e]) => {
-    if (e.isIntersecting) {
-      raf = requestAnimationFrame(tick);
-    } else {
-      cancelAnimationFrame(raf);
-    }
-  });
-  io.observe(canvas);
+  computeBlend();
+  applyBlend();
+  window.addEventListener("resize", resize, { passive: true });
+  raf = requestAnimationFrame(tick);
 }
 
 /* ---- ユーティリティ帯(v1.2): 全ページのヘッダーに自動挿入 ---- */
