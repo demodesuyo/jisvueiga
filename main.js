@@ -252,8 +252,8 @@ function initDust() {
     const which = Math.random() < blend ? idxB : idxA;
     const name = SEASONS[which].name;
     const base = { type: name, x: Math.random() * w, ph: Math.random() * Math.PI * 2 };
-    if (name === "spring") return { ...base, y: -12, r: 5.5 + Math.random() * 4.5,
-      vy: 0.5 + Math.random() * 0.6, rot: Math.random() * Math.PI, vr: (Math.random() - 0.5) * 0.06,
+    if (name === "spring") return { ...base, y: -12, r: 7 + Math.random() * 6,
+      vy: 0.45 + Math.random() * 0.5, rot: Math.random() * Math.PI, vr: (Math.random() - 0.5) * 0.035,
       color: `rgba(${238 + Math.random() * 12}, ${150 + Math.random() * 30}, ${175 + Math.random() * 25}, 0.8)` };
     if (name === "summer") return { ...base, y: h + 10, r: 1.2 + Math.random() * 2.2,
       vy: -(0.2 + Math.random() * 0.35) };                       // 木漏れ日の光の粒(上昇)
@@ -272,13 +272,18 @@ function initDust() {
       ctx.rotate(p.rot);
       ctx.fillStyle = p.color;
       ctx.beginPath();
-      ctx.moveTo(0, r);                                              // 基部(すぼまり)
-      ctx.bezierCurveTo(-r * 0.85, r * 0.55, -r * 0.95, -r * 0.45, -r * 0.34, -r * 0.86); // 左の縁
-      ctx.quadraticCurveTo(-r * 0.13, -r * 1.0, 0, -r * 0.58);       // 切れ込み(左斜面)
-      ctx.quadraticCurveTo(r * 0.13, -r * 1.0, r * 0.34, -r * 0.86); // 切れ込み(右斜面)
-      ctx.bezierCurveTo(r * 0.95, -r * 0.45, r * 0.85, r * 0.55, 0, r); // 右の縁
+      ctx.moveTo(0, r);                                                // 基部(すぼまり)
+      ctx.bezierCurveTo(-r * 0.9, r * 0.5, -r * 1.0, -r * 0.5, -r * 0.42, -r * 0.92); // 左の縁
+      ctx.lineTo(-r * 0.16, -r * 1.0);                                 // 左ローブの先
+      ctx.lineTo(0, -r * 0.42);                                        // ★深い切れ込み
+      ctx.lineTo(r * 0.16, -r * 1.0);                                  // 右ローブの先
+      ctx.lineTo(r * 0.42, -r * 0.92);
+      ctx.bezierCurveTo(r * 1.0, -r * 0.5, r * 0.9, r * 0.5, 0, r);    // 右の縁
       ctx.closePath();
       ctx.fill();
+      ctx.strokeStyle = "rgba(214, 108, 142, 0.5)";                    // 輪郭で形を立たせる
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
       ctx.restore();
     } else if (p.type === "summer") {
       const tw = 0.25 + Math.abs(Math.sin(p.ph)) * 0.45;
