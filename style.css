@@ -1141,3 +1141,23 @@ html.is-motion-off .ticker__track {
 }
 .theater__screen::after { background: none; }
 html.is-motion-off .ticker__track { animation: none !important; }
+
+/* ---------- 17. ティッカー黄色化+スクリーン拡大(v2.5) ---------- */
+/* ロゴと同じマスタードイエローの帯(文字は濃色で可読性確保) */
+.ticker {
+  background: #ecae45;
+  border-color: #d99a33;
+}
+.ticker__track { color: #4a3712; font-weight: 700; }
+.ticker__track .tk-tag {
+  color: #6b4e14;
+  background: rgba(255, 255, 255, 0.45);
+  border-color: rgba(107, 78, 20, 0.5);
+}
+
+/* 映画館を約1.3倍に(SPでは画面幅いっぱいまで広げる) */
+.theater { max-width: 1014px; }
+@media (max-width: 767px) {
+  .theater { width: calc(100% + 28px); margin-inline: -14px; }
+  .theater__stage { border-radius: 8px; }
+}
