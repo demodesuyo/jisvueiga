@@ -10,7 +10,9 @@ document.addEventListener("DOMContentLoaded", () => {
   initMotionStop();
   initChars();
   initDust();
+  initLogo();
   initUtilityNav();
+  initTicker();
   initBookmarks();
 });
 
@@ -578,4 +580,38 @@ function initBookmarksOnRendered(scope) {
     });
     poster.appendChild(btn);
   });
+}
+
+/* ---- ロゴ画像(v2.2): テキストロゴを画像に差し替え ---- */
+function initLogo() {
+  const logo = document.querySelector(".site-header__logo");
+  if (!logo) return;
+  const img = document.createElement("img");
+  img.src = "logo.png";
+  img.alt = "自主映画ねっと";
+  img.width = 616;
+  img.height = 120;
+  logo.textContent = "";
+  logo.appendChild(img);
+}
+
+/* ---- ピックアップ・ティッカー(v2.2): ヘッダー下を今週の1本が流れる ----
+   ▼ 掲載作品を変えるときはここを書き換える */
+const TICKER_PICK = {
+  title: "にわか雨（소나기）",
+  meta: "🇰🇷 韓国・22分・ドラマ",
+  copy: "夕立に足止めされたふたりの、ひと夏の掌編。",
+  href: "works.html",
+};
+
+function initTicker() {
+  const header = document.querySelector(".site-header");
+  if (!header) return;
+  const a = document.createElement("a");
+  a.className = "ticker";
+  a.href = TICKER_PICK.href;
+  a.setAttribute("aria-label", `今週のピックアップ: ${TICKER_PICK.title}`);
+  const text = `<span class="pu">✦ PICK UP</span>今週の1本 『${TICKER_PICK.title}』 ${TICKER_PICK.meta} ── ${TICKER_PICK.copy}`;
+  a.innerHTML = `<div class="ticker__track"><span>${text}</span><span aria-hidden="true">${text}</span></div>`;
+  header.appendChild(a);
 }
