@@ -617,7 +617,7 @@ function initTicker() {
   a.href = TICKER_HREF;
   a.setAttribute("aria-label", "ピックアップ・協賛・応援メッセージのお知らせ(タップで申し込みへ)");
   const text = TICKER_ITEMS.map((it) =>
-    `<span class="tk-item"><span class="tk-tag">${TAG_LABEL[it.type] || ""}</span>${it.text}</span>`
+    `<span class="tk-item tk-${it.type}"><span class="tk-tag">${TAG_LABEL[it.type] || ""}</span>${it.text}</span>`
   ).join("");
   a.innerHTML = `<div class="ticker__track"><span style="display:inline-flex;gap:56px;">${text}</span><span aria-hidden="true" style="display:inline-flex;gap:56px;">${text}</span></div>`;
   header.appendChild(a);
