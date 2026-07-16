@@ -601,13 +601,13 @@ function initLogo() {
    type: "pick"=今週の1本 / "sponsor"=協賛 / "nobori"=ファンからの応援のぼり */
 const TICKER_ITEMS = [
   { type: "pick", text: "今週の1本 『にわか雨（소나기）』 🇰🇷 韓国・22分 ── 夕立に足止めされたふたりの、ひと夏の掌編。" },
-  { type: "nobori", text: "🚩 『青い街』ロドリゴ監督へ ── 日本から応援しています！（シネマ好き・東京）" },
+  { type: "cheer", text: "『青い街』ロドリゴ監督へ ── 日本から応援しています！（シネマ好き・東京）" },
   { type: "sponsor", text: "協賛: ミナト現像所（サンプル）── 自主映画の上映を応援しています" },
-  { type: "nobori", text: "🚩 『にわか雨』ハン監督へ ── 次回作も楽しみに待ってます！（雨の日会・大阪）" },
-  { type: "info", text: "監督にのぼりを贈りませんか？ 応援メッセージを掲載できます → お問い合わせから" },
+  { type: "cheer", text: "『にわか雨』ハン監督へ ── 次回作も楽しみに待ってます！（雨の日会・大阪）" },
+  { type: "info", text: "監督に応援メッセージを送ろう → あなたの声をここに掲載できます（お問い合わせから）" },
 ];
 const TICKER_HREF = "contact.html";
-const TAG_LABEL = { pick: "PICK UP", sponsor: "SPONSOR", nobori: "のぼり", info: "INFO" };
+const TAG_LABEL = { pick: "PICK UP", sponsor: "SPONSOR", cheer: "応援", info: "INFO" };
 
 function initTicker() {
   const header = document.querySelector(".site-header");
@@ -615,12 +615,18 @@ function initTicker() {
   const a = document.createElement("a");
   a.className = "ticker";
   a.href = TICKER_HREF;
-  a.setAttribute("aria-label", "ピックアップ・協賛・応援のぼりのお知らせ(タップで申し込みへ)");
+  a.setAttribute("aria-label", "ピックアップ・協賛・応援メッセージのお知らせ(タップで申し込みへ)");
   const text = TICKER_ITEMS.map((it) =>
     `<span class="tk-item"><span class="tk-tag">${TAG_LABEL[it.type] || ""}</span>${it.text}</span>`
   ).join("");
   a.innerHTML = `<div class="ticker__track"><span style="display:inline-flex;gap:56px;">${text}</span><span aria-hidden="true" style="display:inline-flex;gap:56px;">${text}</span></div>`;
   header.appendChild(a);
+  // 中身の長さに応じて速度を一定に(約30px/秒のゆったり)
+  const track = a.querySelector(".ticker__track");
+  requestAnimationFrame(() => {
+    const half = track.scrollWidth / 2;
+    track.style.animationDuration = Math.max(36, Math.round(half / 30)) + "s";
+  });
 }
 
 /* ---- ピックアップシアター(v2.3): ヒーローの映画館スクリーン ----

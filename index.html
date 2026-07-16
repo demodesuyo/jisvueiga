@@ -58,7 +58,12 @@
         <p class="hero__lead js-reveal" data-delay="2">世界中のYouTubeで公開されている自主映画を、国別に、日本語の紹介つきで。季節がめぐるように、世界の才能と出会える場所です。</p>
         <div class="theater js-reveal" data-delay="2" id="pickup-theater">
           <p class="theater__label">— NOW SHOWING —</p>
-          <div class="theater__screen"></div>
+          <div class="theater__stage">
+            <span class="curtain curtain--l" aria-hidden="true"></span>
+            <span class="curtain curtain--r" aria-hidden="true"></span>
+            <div class="theater__screen"></div>
+            <span class="theater__seats" aria-hidden="true"></span>
+          </div>
           <p class="theater__caption"></p>
         </div>
         <div class="hero__actions js-reveal" data-delay="3">
