@@ -7,16 +7,16 @@
 
 /* ---------- 1. トークン ---------- */
 :root {
-  --color-bg: #f4f9fb;           /* 暗幕: 上映中の客席の黒(暖色寄り) */
-  --color-surface: #ffffff;      /* 煤: カード・フォームの面 */
-  --color-text: #16303b;         /* 銀幕: スクリーンの生成り白 */
-  --color-muted: #5e7a85;        /* 残光: 補助テキスト */
-  --color-accent: #0b7d91;       /* 映写光: タングステンランプのアンバー */
-  --color-accent-ink: #ffffff;   /* accent上の文字色 */
-  --color-line: rgba(22, 48, 59, 0.16);
-  --color-glow: #f6c453;         /* ハレーション */
+  --color-bg: #0c0a07;           /* 暗幕: 上映中の客席の黒(暖色寄り) */
+  --color-surface: #16120c;      /* 煤: カード・フォームの面 */
+  --color-text: #efe7d7;         /* 銀幕: スクリーンの生成り白 */
+  --color-muted: #9c917c;        /* 残光: 補助テキスト */
+  --color-accent: #e9a83b;       /* 映写光: タングステンランプのアンバー */
+  --color-accent-ink: #171006;   /* accent上の文字色 */
+  --color-line: rgba(239, 231, 215, 0.16);
+  --color-glow: #ffd98a;         /* ハレーション */
 
-  --font-display: "Zen Maru Gothic", "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --font-display: "Shippori Mincho B1", "Hiragino Mincho ProN", "Yu Mincho", serif;
   --font-body: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
   --font-mono: "IBM Plex Mono", "Menlo", monospace;
 
@@ -93,7 +93,7 @@ h1, h2, h3 {
   width: 9px; height: 9px; flex: none;
   border: 1.5px solid var(--color-accent);
   border-radius: 50%;
-  box-shadow: 0 0 10px rgba(11, 125, 145, 0.55);
+  box-shadow: 0 0 10px rgba(233, 168, 59, 0.55);
 }
 .section-head__title { font-size: clamp(26px, 4.5vw, 42px); }
 
@@ -107,7 +107,7 @@ h1, h2, h3 {
   transition: background 0.4s, box-shadow 0.4s;
 }
 .site-header.is-scrolled {
-  background: rgba(255, 255, 255, 0.86);
+  background: rgba(12, 10, 7, 0.86);
   backdrop-filter: blur(8px);
   box-shadow: 0 1px 0 var(--color-line);
 }
@@ -149,7 +149,7 @@ h1, h2, h3 {
   .nav-toggle { display: block; }
   .global-nav {
     position: fixed; inset: 0; z-index: var(--z-nav);
-    background: rgba(255, 255, 255, 0.97);
+    background: rgba(12, 10, 7, 0.97);
     display: grid; place-content: center;
     opacity: 0; visibility: hidden; transition: opacity 0.4s, visibility 0.4s;
   }
@@ -168,7 +168,7 @@ h1, h2, h3 {
 }
 .hero__beam {
   position: absolute; inset: 0; pointer-events: none;
-  background: radial-gradient(90% 60% at 82% -8%, rgba(246, 196, 83, 0.28), rgba(11, 125, 145, 0.08) 45%, transparent 70%);
+  background: radial-gradient(90% 60% at 82% -8%, rgba(255, 217, 138, 0.28), rgba(233, 168, 59, 0.08) 45%, transparent 70%);
   animation: beamFlicker 7s infinite;
 }
 .hero__beam::before {
@@ -176,8 +176,8 @@ h1, h2, h3 {
   position: absolute; top: -30%; right: -20%; width: 150%; height: 170%;
   background: linear-gradient(114deg,
     transparent 40%,
-    rgba(246, 196, 83, 0.14) 49%,
-    rgba(246, 196, 83, 0.04) 61%,
+    rgba(255, 217, 138, 0.14) 49%,
+    rgba(255, 217, 138, 0.04) 61%,
     transparent 70%);
 }
 .hero__dust {
@@ -229,14 +229,14 @@ h1, h2, h3 {
 }
 @keyframes charSheen {
   0%, 86%, 100% { color: var(--color-text); text-shadow: none; }
-  91% { color: var(--color-glow); text-shadow: 0 0 26px rgba(246, 196, 83, 0.9); }
+  91% { color: var(--color-glow); text-shadow: 0 0 26px rgba(255, 217, 138, 0.9); }
 }
 
 /* 下層ページヘッダー(映写光の名残を薄く敷く) */
 .page-header {
   position: relative;
   padding: calc(var(--section-pad) * 1.15) 0 calc(var(--section-pad) * 0.45);
-  background: radial-gradient(70% 90% at 85% -30%, rgba(246, 196, 83, 0.13), transparent 65%);
+  background: radial-gradient(70% 90% at 85% -30%, rgba(255, 217, 138, 0.13), transparent 65%);
 }
 .page-header__en {
   font-family: var(--font-mono);
@@ -258,12 +258,12 @@ h1, h2, h3 {
   border: 1px solid var(--color-accent); border-radius: var(--radius);
   font-size: 15px; font-weight: 700; letter-spacing: 0.08em; text-decoration: none;
   cursor: pointer;
-  box-shadow: 0 0 26px rgba(11, 125, 145, 0.28);
+  box-shadow: 0 0 26px rgba(233, 168, 59, 0.28);
   transition: background 0.3s, color 0.3s, box-shadow 0.3s;
 }
 .button:hover {
   background: transparent; color: var(--color-accent); opacity: 1;
-  box-shadow: 0 0 32px rgba(11, 125, 145, 0.42);
+  box-shadow: 0 0 32px rgba(233, 168, 59, 0.42);
 }
 .button:disabled { opacity: 0.5; cursor: wait; }
 .button--ghost {
@@ -340,7 +340,7 @@ h1, h2, h3 {
   transition: box-shadow 0.4s, transform 0.4s var(--ease-out);
 }
 .film-card:hover .film-card__poster {
-  box-shadow: 0 0 30px rgba(11, 125, 145, 0.3);
+  box-shadow: 0 0 30px rgba(233, 168, 59, 0.3);
   transform: translateY(-4px);
 }
 .film-card__poster img { width: 100%; height: 100%; object-fit: cover; }
@@ -518,25 +518,25 @@ html.is-motion-off .hero__dust { display: none; }
   position: relative;
   width: min(64vw, 300px); aspect-ratio: 1;
   display: grid; place-content: center;
-  border: 1.5px solid rgba(22, 48, 59, 0.4);
+  border: 1.5px solid rgba(239, 231, 215, 0.4);
   border-radius: 50%;
 }
 .leader__frame::before {
   content: "";
   position: absolute; inset: 14px;
-  border: 1px solid rgba(22, 48, 59, 0.22);
+  border: 1px solid rgba(239, 231, 215, 0.22);
   border-radius: 50%;
 }
 .leader__frame::after {
   content: "";
   position: absolute; left: 50%; top: 50%;
   width: 1px; height: 50%;
-  background: rgba(22, 48, 59, 0.45);
+  background: rgba(239, 231, 215, 0.45);
   transform-origin: top center;
   animation: leaderSweep 0.6s linear infinite;
 }
 .leader__cross-h, .leader__cross-v {
-  position: absolute; background: rgba(22, 48, 59, 0.16);
+  position: absolute; background: rgba(239, 231, 215, 0.16);
 }
 .leader__cross-h { left: -12vw; right: -12vw; top: 50%; height: 1px; }
 .leader__cross-v { top: -12vh; bottom: -12vh; left: 50%; width: 1px; }
@@ -579,625 +579,3 @@ html.is-motion-off .hero__dust { display: none; }
   100% { transform: translate(0, 0); }
 }
 html.is-motion-off .hero__grain, html.is-motion-off .leader { display: none; }
-
-/* ---------- 8. ユーティリティ帯+ランキング+ブックマーク(v1.2) ---------- */
-.site-header { flex-wrap: wrap; }
-.utility-nav { order: 4; width: 100%; margin-top: 10px; }
-.utility-nav ul {
-  display: flex; gap: 8px; list-style: none; padding: 0; margin: 0;
-  overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
-}
-.utility-nav ul::-webkit-scrollbar { display: none; }
-.utility-nav a {
-  display: flex; align-items: center; gap: 6px;
-  padding: 7px 14px; white-space: nowrap;
-  border: 1px solid var(--color-line); border-radius: 999px;
-  background: rgba(255, 255, 255, 0.55); backdrop-filter: blur(6px);
-  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em;
-  text-decoration: none;
-}
-.utility-nav a[aria-current="page"] { border-color: var(--color-accent); color: var(--color-accent); }
-.utility-nav .u-ic, .utility-nav .u-count { color: var(--color-accent); }
-
-/* 作品カードのブックマーク★ */
-.film-card__poster { position: relative; }
-.bm-btn {
-  position: absolute; top: 8px; right: 8px; z-index: 2;
-  width: 36px; height: 36px;
-  display: grid; place-content: center;
-  border: 1px solid var(--color-line); border-radius: 50%;
-  background: rgba(255, 255, 255, 0.62); color: var(--color-text);
-  font-size: 16px; line-height: 1; cursor: pointer;
-  transition: color 0.25s, border-color 0.25s, transform 0.25s;
-}
-.bm-btn:hover { transform: scale(1.08); }
-.bm-btn.is-on {
-  color: var(--color-accent); border-color: var(--color-accent);
-  box-shadow: 0 0 14px rgba(11, 125, 145, 0.4);
-}
-
-/* イチオシ */
-.pickup {
-  display: grid; grid-template-columns: minmax(140px, 220px) 1fr;
-  gap: clamp(20px, 4vw, 40px); align-items: center;
-  background: var(--color-surface);
-  border: 1px solid var(--color-accent); border-radius: var(--radius);
-  padding: clamp(20px, 4vw, 40px);
-  box-shadow: 0 0 34px rgba(11, 125, 145, 0.14);
-}
-.pickup__label {
-  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.24em;
-  color: var(--color-accent); margin-bottom: 12px;
-}
-.pickup__title { font-size: clamp(20px, 3vw, 28px); margin-bottom: 10px; }
-.pickup__meta { font-family: var(--font-mono); font-size: 12px; color: var(--color-muted); margin-bottom: 14px; }
-.pickup__desc { font-size: 14px; color: var(--color-muted); }
-@media (max-width: 600px) { .pickup { grid-template-columns: 1fr; } .pickup img { max-width: 200px; } }
-
-/* ランキング */
-.rank-list { list-style: none; padding: 0; display: grid; gap: 12px; }
-.rank-list li {
-  display: grid; grid-template-columns: 56px 64px 1fr; gap: 16px; align-items: center;
-  background: var(--color-surface); border: 1px solid var(--color-line);
-  border-radius: var(--radius); padding: 14px 18px;
-}
-.rank-list .rk {
-  font-family: var(--font-mono); font-size: 20px; color: var(--color-muted);
-  text-align: center;
-}
-.rank-list li:nth-child(-n+3) .rk { color: var(--color-accent); text-shadow: 0 0 12px rgba(11, 125, 145, 0.5); }
-.rank-list img { width: 64px; aspect-ratio: 2/3; object-fit: cover; border: 1px solid var(--color-line); }
-.rank-list .rk-title { font-family: var(--font-display); font-size: 16px; }
-.rank-list .rk-meta { font-family: var(--font-mono); font-size: 11px; color: var(--color-muted); margin-top: 2px; }
-
-/* ブックマーク一覧の空状態 */
-.bm-empty { color: var(--color-muted); padding: 40px 0; }
-
-/* ---------- 9. 自主映画ねっと ライト海テーマ上書き ---------- */
-body {
-  background: linear-gradient(180deg, #fdfeff 0%, #f4f9fb 40%, #eaf4f7 100%);
-}
-
-/* ヒーロー: 波光(コースティクス)+きらめきcanvas+波形の縁 */
-.hero {
-  background:
-    radial-gradient(46% 34% at 22% 18%, rgba(191, 232, 240, 0.55), transparent 70%),
-    radial-gradient(40% 30% at 78% 60%, rgba(246, 196, 83, 0.16), transparent 70%),
-    radial-gradient(52% 40% at 60% 10%, rgba(255, 255, 255, 0.9), transparent 70%);
-  animation: none;
-  padding-bottom: calc(var(--space) * 16);
-}
-.hero__beam {
-  background:
-    radial-gradient(60% 45% at 30% 30%, rgba(191, 232, 240, 0.5), transparent 70%),
-    radial-gradient(50% 40% at 70% 55%, rgba(178, 226, 236, 0.4), transparent 72%);
-  animation: caustics 14s ease-in-out infinite alternate;
-}
-.hero__beam::before { display: none; }
-@keyframes caustics {
-  from { transform: translate(0, 0) scale(1); opacity: 0.85; }
-  to { transform: translate(3%, -2%) scale(1.06); opacity: 1; }
-}
-.hero::after {
-  /* 波形の縁(シグネチャー) */
-  content: "";
-  position: absolute; left: 0; right: 0; bottom: -1px; height: 42px;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 42' preserveAspectRatio='none'%3E%3Cpath d='M0 22 Q 150 0 300 20 T 600 20 T 900 22 T 1200 18 L 1200 42 L 0 42 Z' fill='%23f4f9fb'/%3E%3C/svg%3E") repeat-x bottom / 1200px 42px;
-  pointer-events: none;
-}
-.hero__title .char { animation-name: charGlint; }
-@keyframes charGlint {
-  0%, 86%, 100% { color: var(--color-text); text-shadow: none; }
-  91% { color: var(--color-accent); text-shadow: 0 0 18px rgba(246, 196, 83, 0.8); }
-}
-.hero__en, .hero__scroll { color: var(--color-accent); }
-
-/* ライトテーマでは発光→影に置き換え */
-.site-header.is-scrolled {
-  background: rgba(255, 255, 255, 0.88);
-  box-shadow: 0 1px 0 var(--color-line), 0 6px 24px rgba(22, 48, 59, 0.06);
-}
-.button {
-  color: #ffffff;
-  box-shadow: 0 8px 22px rgba(11, 125, 145, 0.28);
-}
-.button:hover { color: var(--color-accent); box-shadow: 0 8px 26px rgba(11, 125, 145, 0.2); }
-.steps li, .faq details, .pickup, .rank-list li, .duo__visual {
-  box-shadow: 0 10px 30px rgba(22, 48, 59, 0.07);
-}
-.film-card:hover .film-card__poster {
-  box-shadow: 0 14px 30px rgba(22, 48, 59, 0.16);
-}
-.filmstrip-band { background: #ffffff; }
-.utility-nav a { background: rgba(255, 255, 255, 0.8); }
-.bm-btn { background: rgba(255, 255, 255, 0.85); }
-.cta-band { color: #ffffff; }
-.cta-band .button { background: #ffffff; color: var(--color-accent); border-color: #ffffff; }
-.cta-band .button:hover { background: transparent; color: #ffffff; }
-.leader, .hero__grain { display: none !important; }
-
-/* 国旗チップ */
-.country-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 12px; list-style: none; padding: 0;
-}
-.country-chip {
-  display: flex; align-items: center; gap: 10px;
-  padding: 13px 16px;
-  background: #ffffff; border: 1px solid var(--color-line); border-radius: 12px;
-  text-decoration: none;
-  box-shadow: 0 6px 18px rgba(22, 48, 59, 0.06);
-  transition: transform 0.25s var(--ease-out), box-shadow 0.25s;
-}
-.country-chip:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(22, 48, 59, 0.12); opacity: 1; }
-.country-chip .flag { font-size: 20px; }
-.country-chip .cnt {
-  margin-left: auto;
-  font-family: var(--font-mono); font-size: 11px; color: var(--color-accent);
-}
-/* 姉妹サイト帯 */
-.sister {
-  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
-  gap: 16px;
-  background: #10222b; color: #f0ece1;
-  border-radius: 14px;
-  padding: clamp(24px, 4vw, 40px);
-}
-.sister h2 { font-size: clamp(19px, 2.6vw, 24px); }
-.sister p { color: #b9c4c0; font-size: 14px; margin-top: 6px; }
-.sister .button { background: #e9a83b; border-color: #e9a83b; color: #171006; box-shadow: none; }
-.sister .button:hover { background: transparent; color: #e9a83b; }
-
-/* ---------- 10. 海感強化+ヘッダー重なり修正(v1.1) ---------- */
-/* ヘッダー実高さぶんの余白を自動確保(JSが --header-h を設定) */
-.hero { padding-top: calc(var(--header-h, 120px) + 24px); }
-.page-header { padding-top: calc(var(--header-h, 120px) + clamp(32px, 7vw, 80px)); }
-
-/* 太陽: 右上に陽だまり */
-.hero {
-  background:
-    radial-gradient(34% 26% at 82% 6%, rgba(246, 196, 83, 0.4), rgba(246, 196, 83, 0.12) 55%, transparent 75%),
-    radial-gradient(46% 34% at 22% 18%, rgba(191, 232, 240, 0.55), transparent 70%),
-    radial-gradient(52% 40% at 60% 10%, rgba(255, 255, 255, 0.9), transparent 70%);
-}
-
-/* 波光: 揺らぐ光の輪(コースティクス)を二層に */
-.hero__beam {
-  background:
-    radial-gradient(58% 44% at 28% 32%, rgba(178, 226, 236, 0.6), transparent 68%),
-    radial-gradient(48% 38% at 72% 58%, rgba(159, 216, 228, 0.5), transparent 70%);
-  animation: caustics 12s ease-in-out infinite alternate;
-}
-.hero__beam::before {
-  display: block;
-  content: "";
-  position: absolute; inset: -20%;
-  background:
-    repeating-radial-gradient(circle at 34% 40%, rgba(255, 255, 255, 0) 0 46px, rgba(255, 255, 255, 0.16) 46px 58px, rgba(255, 255, 255, 0) 58px 112px),
-    repeating-radial-gradient(circle at 70% 62%, rgba(191, 232, 240, 0) 0 60px, rgba(191, 232, 240, 0.2) 60px 74px, rgba(191, 232, 240, 0) 74px 142px);
-  filter: blur(6px);
-  animation: ripple 18s ease-in-out infinite alternate;
-}
-@keyframes ripple {
-  from { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 0.7; }
-  to { transform: translate(-2.5%, 1.8%) rotate(2deg) scale(1.05); opacity: 1; }
-}
-
-/* うちよせる波: 二層の波が違う速さで流れ、ゆっくり上下する */
-.hero::before {
-  content: "";
-  position: absolute; left: 0; right: 0; bottom: -2px; height: 64px; z-index: 1;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 64' preserveAspectRatio='none'%3E%3Cpath d='M0 34 Q 150 10 300 30 T 600 30 T 900 34 T 1200 26 L 1200 64 L 0 64 Z' fill='%23cfe6ee' fill-opacity='0.75'/%3E%3C/svg%3E") repeat-x bottom / 1200px 64px;
-  animation: waveBack 16s linear infinite, waveBob 7s ease-in-out infinite alternate;
-  pointer-events: none;
-}
-.hero::after {
-  height: 52px; z-index: 2;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 52' preserveAspectRatio='none'%3E%3Cpath d='M0 26 Q 150 4 300 24 T 600 24 T 900 26 T 1200 20 L 1200 52 L 0 52 Z' fill='%23f4f9fb'/%3E%3C/svg%3E") repeat-x bottom / 1200px 52px;
-  animation: waveFront 9s linear infinite, waveBob 5.5s ease-in-out infinite alternate-reverse;
-}
-@keyframes waveBack { from { background-position-x: 0; } to { background-position-x: 1200px; } }
-@keyframes waveFront { from { background-position-x: 1200px; } to { background-position-x: 0; } }
-@keyframes waveBob {
-  from { transform: translateY(0); }
-  to { transform: translateY(-7px); }
-}
-
-html.is-motion-off .hero::before,
-html.is-motion-off .hero::after,
-html.is-motion-off .hero__beam,
-html.is-motion-off .hero__beam::before { animation: none !important; }
-
-/* ---------- 11. 「海の絵」への作り直し(v1.2): オレンジ廃止・水平線導入 ---------- */
-/* 空(上) → 水平線(55%) → 海(下) */
-.hero {
-  background: linear-gradient(180deg,
-    #fdffff 0%,
-    #eef7fa 34%,
-    #e2f1f5 52%,
-    #d5ecf1 54.8%,
-    #c4e5ec 55%,
-    #bde1e9 68%,
-    #aed8e2 100%);
-}
-/* 海面レイヤー: 水平線から下だけ。さざなみの横縞+波光 */
-.hero__beam {
-  inset: auto 0 0 0; top: 54.6%;
-  background:
-    repeating-linear-gradient(180deg,
-      rgba(255, 255, 255, 0) 0 9px,
-      rgba(255, 255, 255, 0.22) 9px 10px,
-      rgba(255, 255, 255, 0) 10px 26px),
-    radial-gradient(70% 60% at 50% 0%, rgba(255, 255, 255, 0.4), transparent 70%);
-  border-top: 1px solid rgba(255, 255, 255, 0.85);
-  box-shadow: 0 -1px 14px rgba(255, 255, 255, 0.55);
-  animation: seaBreath 9s ease-in-out infinite alternate;
-}
-@keyframes seaBreath {
-  from { opacity: 0.8; }
-  to { opacity: 1; }
-}
-/* 波光の輪も海面の中だけで揺れる */
-.hero__beam::before {
-  inset: 0;
-  background:
-    repeating-radial-gradient(circle at 40% 30%, rgba(255, 255, 255, 0) 0 42px, rgba(255, 255, 255, 0.18) 42px 52px, rgba(255, 255, 255, 0) 52px 104px),
-    repeating-radial-gradient(circle at 66% 70%, rgba(255, 255, 255, 0) 0 56px, rgba(255, 255, 255, 0.14) 56px 68px, rgba(255, 255, 255, 0) 68px 132px);
-  filter: blur(5px);
-}
-/* きらめきcanvasも海面だけに */
-.hero__dust { inset: auto 0 0 0; top: 54.6%; }
-
-/* 文字の点灯からもオレンジを排除(白銀のきらめきに) */
-@keyframes charGlint {
-  0%, 86%, 100% { color: var(--color-text); text-shadow: none; }
-  91% { color: var(--color-accent); text-shadow: 0 0 16px rgba(255, 255, 255, 0.95); }
-}
-
-html.is-motion-off .hero__beam { animation: none !important; }
-
-/* ---------- 12. 水中の光へ(v1.3): 境界線なしの青+ゴッドレイ ---------- */
-.hero {
-  /* なめらかに深くなる一続きの青(段差なし) */
-  background: linear-gradient(180deg,
-    #8ec4de 0%, #5da3c7 22%, #3c86af 45%, #2a6d9a 66%, #1e5a86 84%, #1a5078 100%);
-}
-/* 水面の光と光の柱(ゴッドレイ) */
-.hero__beam {
-  inset: 0; top: 0;
-  border-top: none; box-shadow: none;
-  background: radial-gradient(52% 40% at 50% -8%,
-    rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.16) 46%, transparent 72%);
-  animation: seaBreath 9s ease-in-out infinite alternate;
-}
-.hero__beam::before {
-  inset: -12% -8%;
-  filter: blur(2px);
-  background: repeating-linear-gradient(76deg,
-    transparent 0 110px,
-    rgba(255, 255, 255, 0.12) 110px 142px,
-    transparent 142px 300px);
-  -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,0.95), rgba(0,0,0,0.35) 45%, transparent 78%);
-  mask-image: linear-gradient(180deg, rgba(0,0,0,0.95), rgba(0,0,0,0.35) 45%, transparent 78%);
-  animation: raysA 13s ease-in-out infinite alternate;
-}
-.hero__beam::after {
-  content: "";
-  position: absolute; inset: -12% -8%;
-  filter: blur(4px);
-  background: repeating-linear-gradient(86deg,
-    transparent 0 150px,
-    rgba(255, 255, 255, 0.09) 150px 200px,
-    transparent 200px 380px);
-  -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,0.9), rgba(0,0,0,0.3) 50%, transparent 82%);
-  mask-image: linear-gradient(180deg, rgba(0,0,0,0.9), rgba(0,0,0,0.3) 50%, transparent 82%);
-  animation: raysB 17s ease-in-out infinite alternate-reverse;
-}
-@keyframes raysA {
-  from { transform: translateX(0); opacity: 0.75; }
-  to { transform: translateX(-3%); opacity: 1; }
-}
-@keyframes raysB {
-  from { transform: translateX(0); opacity: 0.6; }
-  to { transform: translateX(2.5%); opacity: 0.95; }
-}
-/* 泡と魚のcanvasはヒーロー全面に */
-.hero__dust { inset: 0; top: 0; }
-
-/* 水中では文字は白 */
-.hero__title, .hero__title .char { color: #ffffff; }
-.hero__lead { color: rgba(255, 255, 255, 0.88); }
-.hero__en, .hero__scroll { color: #cfeaf4; }
-.hero__sub-link { color: #ffffff; text-decoration-color: rgba(255, 255, 255, 0.7); }
-.hero .button {
-  background: #ffffff; border-color: #ffffff; color: var(--color-accent);
-  box-shadow: 0 10px 26px rgba(10, 40, 65, 0.3);
-}
-.hero .button:hover { background: transparent; color: #ffffff; }
-.hero .utility-nav a { background: rgba(255, 255, 255, 0.9); }
-@keyframes charGlint {
-  0%, 86%, 100% { color: #ffffff; text-shadow: none; }
-  91% { color: #ffffff; text-shadow: 0 0 20px rgba(255, 255, 255, 0.95), 0 0 34px rgba(191, 232, 240, 0.8); }
-}
-
-/* 波の縁: 手前はページ色のまま、奥の波は白い泡に */
-.hero::before {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 64' preserveAspectRatio='none'%3E%3Cpath d='M0 34 Q 150 10 300 30 T 600 30 T 900 34 T 1200 26 L 1200 64 L 0 64 Z' fill='%23ffffff' fill-opacity='0.35'/%3E%3C/svg%3E");
-}
-
-html.is-motion-off .hero__beam,
-html.is-motion-off .hero__beam::before,
-html.is-motion-off .hero__beam::after { animation: none !important; }
-
-/* ---------- 13. 日本の四季(v2.0): スクロールで春→夏→秋→冬 ---------- */
-/* 背景はJSが注入する固定レイヤー2枚のクロスフェードで表現 */
-body { background: #fef7f9; }
-.season-bg, .season-bg__a, .season-bg__b {
-  position: fixed; inset: 0; pointer-events: none;
-}
-.season-bg { z-index: -2; }
-.season-bg__b { opacity: 0; }
-.season-canvas {
-  position: fixed; inset: 0; z-index: -1; pointer-events: none;
-}
-
-/* 海仕様を解除して、淡い陽の光だけ残す */
-.hero { background: transparent; padding-bottom: calc(var(--space) * 12); }
-.hero::before, .hero::after { content: none; }
-.hero__beam, .hero__beam::before, .hero__beam::after {
-  animation: none; background: none; filter: none;
-  -webkit-mask-image: none; mask-image: none;
-}
-.hero__beam {
-  background: radial-gradient(56% 42% at 68% -6%,
-    rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.2) 48%, transparent 72%);
-}
-.hero__dust { display: none; }
-
-/* 文字色を明るい背景用に戻す */
-.hero__title, .hero__title .char { color: var(--color-text); }
-.hero__lead { color: var(--color-muted); }
-.hero__en, .hero__scroll { color: var(--color-accent); }
-.hero__sub-link { color: var(--color-text); text-decoration-color: var(--color-accent); }
-.hero .button {
-  background: var(--color-accent); border-color: var(--color-accent); color: #ffffff;
-  box-shadow: 0 8px 22px rgb(var(--accent-rgb, 194 80 109) / 0.3);
-}
-.hero .button:hover { background: transparent; color: var(--color-accent); }
-@keyframes charGlint {
-  0%, 86%, 100% { color: var(--color-text); text-shadow: none; }
-  91% { color: var(--color-accent); text-shadow: 0 0 16px rgb(var(--accent-rgb, 194 80 109) / 0.55); }
-}
-
-/* 差し色は季節に合わせてJSがなめらかに変える */
-.button { box-shadow: 0 8px 22px rgb(var(--accent-rgb, 194 80 109) / 0.28); }
-.button:hover { box-shadow: 0 8px 26px rgb(var(--accent-rgb, 194 80 109) / 0.2); }
-.bm-btn.is-on { box-shadow: 0 0 14px rgb(var(--accent-rgb, 194 80 109) / 0.4); }
-.utility-nav a { background: rgba(255, 255, 255, 0.82); }
-.site-header.is-scrolled { background: rgba(255, 255, 255, 0.9); }
-
-/* 面の白は少し透かして季節の色をまとわせる */
-.filmstrip-band { background: rgba(255, 255, 255, 0.72); backdrop-filter: blur(2px); }
-.steps li, .faq details, .country-chip, .rank-list li {
-  background: rgba(255, 255, 255, 0.85);
-}
-
-html.is-motion-off .season-canvas { display: none; }
-
-/* ---------- 14. ロゴ画像+ピックアップ・ティッカー(v2.2) ---------- */
-.site-header__logo img {
-  height: 30px; width: auto; display: block;
-}
-@media (min-width: 768px) { .site-header__logo img { height: 36px; } }
-
-.ticker {
-  order: 5; width: 100%; margin-top: 8px;
-  display: block; overflow: hidden;
-  background: rgba(255, 255, 255, 0.78);
-  border: 1px solid var(--color-line);
-  border-radius: 999px;
-  text-decoration: none;
-  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
-  mask-image: linear-gradient(90deg, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
-}
-.ticker:hover { opacity: 1; }
-.ticker__track {
-  display: inline-flex; gap: 56px;
-  padding: 7px 0 7px 56px;
-  white-space: nowrap; will-change: transform;
-  animation: tickerMove 20s linear infinite;
-  font-size: 12.5px; letter-spacing: 0.04em;
-}
-.ticker__track .pu {
-  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.2em;
-  color: var(--color-accent); margin-right: 10px;
-}
-@keyframes tickerMove {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-.ticker:hover .ticker__track { animation-play-state: paused; }
-html.is-motion-off .ticker__track {
-  animation: none !important;
-  padding-left: 12px;
-}
-
-/* ---------- 15. シアタースクリーン+のぼりティッカー(v2.3) ---------- */
-/* ヒーロー: スクリーンが主役、文字は控えめに */
-.hero { align-items: center; }
-.hero__inner { text-align: center; width: min(860px, 100% - 48px); }
-.hero__en { font-size: 11px; }
-.hero__title {
-  font-size: clamp(20px, 4.2vw, 30px);
-  letter-spacing: 0.1em;
-}
-.hero__lead {
-  font-size: 14px; max-width: 34em;
-  margin-left: auto; margin-right: auto;
-}
-.hero__actions { justify-content: center; }
-
-.theater { margin: clamp(18px, 3vw, 28px) auto 0; max-width: 780px; }
-.theater__label {
-  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.28em;
-  color: var(--color-accent); margin-bottom: 10px;
-}
-.theater__screen {
-  position: relative; aspect-ratio: 16 / 9;
-  background: #14181d;
-  border: 6px solid #262b31;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow:
-    0 26px 60px rgb(var(--accent-rgb, 90 90 120) / 0.22),
-    0 2px 0 rgba(255, 255, 255, 0.5);
-}
-.theater__screen::after {
-  /* スクリーンの照り返し */
-  content: "";
-  position: absolute; inset: 0;
-  background: linear-gradient(115deg, rgba(255,255,255,0.1), transparent 40%);
-  pointer-events: none;
-}
-.theater__screen iframe,
-.theater__screen img {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%; object-fit: cover; border: 0;
-}
-.theater__play {
-  position: absolute; inset: 0;
-  display: grid; place-content: center;
-  background: rgba(10, 14, 18, 0.35);
-  border: 0; cursor: pointer;
-}
-.theater__play .pbtn {
-  width: 64px; height: 64px; border-radius: 50%;
-  background: rgba(255, 255, 255, 0.94);
-  display: grid; place-content: center;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
-  transition: transform 0.25s var(--ease-out);
-}
-.theater__play:hover .pbtn { transform: scale(1.1); }
-.theater__play .pbtn::before {
-  content: "";
-  border-style: solid; border-width: 11px 0 11px 19px;
-  border-color: transparent transparent transparent #14181d;
-  margin-left: 4px;
-}
-.theater__play .msg {
-  margin-top: 14px;
-  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.2em;
-  color: rgba(255, 255, 255, 0.9);
-}
-.theater__caption {
-  margin-top: 12px; font-size: 13px; color: var(--color-muted);
-}
-.theater__caption strong { color: var(--color-text); font-weight: 700; }
-
-/* ティッカー項目のタグ(PICK UP / SPONSOR / のぼり) */
-.ticker__track .tk-tag {
-  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.18em;
-  color: var(--color-accent);
-  border: 1px solid currentColor; border-radius: 999px;
-  padding: 1px 9px; margin-right: 10px;
-}
-.ticker__track .tk-item { display: inline-flex; align-items: center; }
-
-/* ---------- 16. 映画館ステージ+ティッカー減速(v2.4) ---------- */
-/* 参考イラスト準拠: 赤い緞帳・上部のバランス・暗幕・客席 */
-.theater__stage {
-  position: relative;
-  border-radius: 10px;
-  overflow: hidden;
-  background: #3a3340;                       /* 暗幕 */
-  padding: 8.5% 15% 11%;
-  box-shadow: 0 26px 60px rgb(var(--accent-rgb, 90 90 120) / 0.24);
-}
-.theater__stage::before {                     /* 上部のバランス(幕の垂れ) */
-  content: "";
-  position: absolute; inset: 0 0 auto 0; height: 7%;
-  background: #cf3d3f;
-  z-index: 3;
-}
-.curtain {
-  position: absolute; top: 0; bottom: 10%;
-  width: 19%; z-index: 2;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 400' preserveAspectRatio='none'%3E%3Cpath d='M0 0 H90 C 58 120, 58 250, 98 400 L0 400 Z' fill='%23cf3d3f'/%3E%3Cpath d='M28 30 C 22 120, 24 220, 34 330' stroke='%23b53438' stroke-width='5' fill='none'/%3E%3Cpath d='M56 26 C 48 110, 50 190, 62 300' stroke='%23b53438' stroke-width='5' fill='none'/%3E%3C/svg%3E") no-repeat center / 100% 100%;
-}
-.curtain--l { left: 0; }
-.curtain--r { right: 0; transform: scaleX(-1); }
-.theater__seats {                             /* 客席の背もたれ */
-  position: absolute; left: 0; right: 0; bottom: 0; height: 10%;
-  z-index: 3;
-  background: repeating-linear-gradient(90deg,
-    #cf3d3f 0 15.2%, #3a3340 15.2% 16.9%);
-}
-.theater__screen {
-  position: relative; aspect-ratio: 16 / 9;
-  background: #ffffff;
-  border: 0; border-radius: 3px;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(20, 14, 24, 0.45);
-}
-.theater__screen::after { background: none; }
-html.is-motion-off .ticker__track { animation: none !important; }
-
-/* ---------- 17. ティッカー黄色化+スクリーン拡大(v2.5) ---------- */
-/* ロゴと同じマスタードイエローの帯(文字は濃色で可読性確保) */
-.ticker {
-  background: #ecae45;
-  border-color: #d99a33;
-}
-.ticker__track { color: #4a3712; font-weight: 700; }
-.ticker__track .tk-tag {
-  color: #6b4e14;
-  background: rgba(255, 255, 255, 0.45);
-  border-color: rgba(107, 78, 20, 0.5);
-}
-
-/* 映画館を約1.3倍に(SPでは画面幅いっぱいまで広げる) */
-.theater { max-width: 1014px; }
-@media (max-width: 767px) {
-  .theater { width: calc(100% + 28px); margin-inline: -14px; }
-  .theater__stage { border-radius: 8px; }
-}
-
-/* ---------- 18. LED電光掲示板ティッカー(v2.6) ---------- */
-.ticker {
-  background: #0b0b0c;
-  border: 2px solid #2c2c30;
-  border-radius: 0;                          /* まっすぐな箱 */
-  -webkit-mask-image: none; mask-image: none; /* 両端フェード廃止 */
-  box-shadow: inset 0 0 14px rgba(0, 0, 0, 0.9), 0 2px 6px rgba(0, 0, 0, 0.25);
-  position: relative;
-}
-.ticker::after {
-  /* LEDのドットマトリクス網目 */
-  content: "";
-  position: absolute; inset: 0;
-  background-image: radial-gradient(rgba(0, 0, 0, 0.62) 1px, transparent 1.1px);
-  background-size: 3px 3px;
-  pointer-events: none;
-}
-.ticker__track {
-  font-family: var(--font-mono);
-  font-weight: 700;
-  font-size: 13px;
-  letter-spacing: 0.14em;
-  color: #ffc247;                             /* 基本はLEDアンバー */
-  text-shadow: 0 0 7px currentColor, 0 0 1px currentColor;
-  padding-top: 8px; padding-bottom: 8px;
-}
-/* 項目ごとの発光色(参考画像のマルチカラー) */
-.ticker__track .tk-pick    { color: #ffc247; }
-.ticker__track .tk-cheer   { color: #56f07d; }
-.ticker__track .tk-sponsor { color: #ff6ad5; }
-.ticker__track .tk-info    { color: #59d7ff; }
-.ticker__track .tk-item { text-shadow: 0 0 7px currentColor, 0 0 1px currentColor; }
-.ticker__track .tk-tag {
-  color: inherit;
-  background: none;
-  border: 1px solid currentColor;
-  border-radius: 0;
-  padding: 0 8px;
-}
