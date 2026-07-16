@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initLogo();
   initUtilityNav();
   initTicker();
+  initTheater();
   initBookmarks();
 });
 
@@ -595,23 +596,67 @@ function initLogo() {
   logo.appendChild(img);
 }
 
-/* ---- ピックアップ・ティッカー(v2.2): ヘッダー下を今週の1本が流れる ----
-   ▼ 掲載作品を変えるときはここを書き換える */
-const TICKER_PICK = {
-  title: "にわか雨（소나기）",
-  meta: "🇰🇷 韓国・22分・ドラマ",
-  copy: "夕立に足止めされたふたりの、ひと夏の掌編。",
-  href: "works.html",
-};
+/* ---- のぼりティッカー(v2.3): ピックアップ/スポンサー/ファンからののぼり ----
+   ▼ 掲載内容はこの配列を書き換えるだけ(上から順に流れます)
+   type: "pick"=今週の1本 / "sponsor"=協賛 / "nobori"=ファンからの応援のぼり */
+const TICKER_ITEMS = [
+  { type: "pick", text: "今週の1本 『にわか雨（소나기）』 🇰🇷 韓国・22分 ── 夕立に足止めされたふたりの、ひと夏の掌編。" },
+  { type: "nobori", text: "🚩 『青い街』ロドリゴ監督へ ── 日本から応援しています！（シネマ好き・東京）" },
+  { type: "sponsor", text: "協賛: ミナト現像所（サンプル）── 自主映画の上映を応援しています" },
+  { type: "nobori", text: "🚩 『にわか雨』ハン監督へ ── 次回作も楽しみに待ってます！（雨の日会・大阪）" },
+  { type: "info", text: "監督にのぼりを贈りませんか？ 応援メッセージを掲載できます → お問い合わせから" },
+];
+const TICKER_HREF = "contact.html";
+const TAG_LABEL = { pick: "PICK UP", sponsor: "SPONSOR", nobori: "のぼり", info: "INFO" };
 
 function initTicker() {
   const header = document.querySelector(".site-header");
   if (!header) return;
   const a = document.createElement("a");
   a.className = "ticker";
-  a.href = TICKER_PICK.href;
-  a.setAttribute("aria-label", `今週のピックアップ: ${TICKER_PICK.title}`);
-  const text = `<span class="pu">✦ PICK UP</span>今週の1本 『${TICKER_PICK.title}』 ${TICKER_PICK.meta} ── ${TICKER_PICK.copy}`;
-  a.innerHTML = `<div class="ticker__track"><span>${text}</span><span aria-hidden="true">${text}</span></div>`;
+  a.href = TICKER_HREF;
+  a.setAttribute("aria-label", "ピックアップ・協賛・応援のぼりのお知らせ(タップで申し込みへ)");
+  const text = TICKER_ITEMS.map((it) =>
+    `<span class="tk-item"><span class="tk-tag">${TAG_LABEL[it.type] || ""}</span>${it.text}</span>`
+  ).join("");
+  a.innerHTML = `<div class="ticker__track"><span style="display:inline-flex;gap:56px;">${text}</span><span aria-hidden="true" style="display:inline-flex;gap:56px;">${text}</span></div>`;
   header.appendChild(a);
+}
+
+/* ---- ピックアップシアター(v2.3): ヒーローの映画館スクリーン ----
+   ▼ youtubeId に動画ID(例: "dQw4w9WgXcQ")を入れると、タップで再生されます。
+      空("")の間は「上映準備中」のポスター表示になります。 */
+const PICKUP_THEATER = {
+  youtubeId: "",
+  title: "にわか雨（소나기）",
+  meta: "🇰🇷 韓国・22分・ドラマ",
+  poster: "film-kr.svg",
+};
+
+function initTheater() {
+  const mount = document.querySelector("#pickup-theater");
+  if (!mount) return;
+  const p = PICKUP_THEATER;
+  const screen = mount.querySelector(".theater__screen");
+  const caption = mount.querySelector(".theater__caption");
+  caption.innerHTML = `上映中: <strong>『${p.title}』</strong> ${p.meta}`;
+  screen.innerHTML = `<img src="${p.poster}" alt="">`;
+
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "theater__play";
+  const ready = Boolean(p.youtubeId);
+  btn.setAttribute("aria-label", ready ? `『${p.title}』を再生` : "上映準備中(作品一覧を見る)");
+  btn.innerHTML = `<span class="pbtn" aria-hidden="true"></span><span class="msg">${ready ? "TAP TO PLAY" : "COMING SOON — 上映準備中"}</span>`;
+  btn.addEventListener("click", () => {
+    if (!ready) { window.location.href = "works.html"; return; }
+    const f = document.createElement("iframe");
+    f.src = `https://www.youtube-nocookie.com/embed/${p.youtubeId}?autoplay=1&rel=0`;
+    f.title = p.title;
+    f.allow = "autoplay; encrypted-media; picture-in-picture";
+    f.allowFullscreen = true;
+    screen.innerHTML = "";
+    screen.appendChild(f);
+  });
+  screen.appendChild(btn);
 }

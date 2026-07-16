@@ -1021,3 +1021,84 @@ html.is-motion-off .ticker__track {
   animation: none !important;
   padding-left: 12px;
 }
+
+/* ---------- 15. シアタースクリーン+のぼりティッカー(v2.3) ---------- */
+/* ヒーロー: スクリーンが主役、文字は控えめに */
+.hero { align-items: center; }
+.hero__inner { text-align: center; width: min(860px, 100% - 48px); }
+.hero__en { font-size: 11px; }
+.hero__title {
+  font-size: clamp(20px, 4.2vw, 30px);
+  letter-spacing: 0.1em;
+}
+.hero__lead {
+  font-size: 14px; max-width: 34em;
+  margin-left: auto; margin-right: auto;
+}
+.hero__actions { justify-content: center; }
+
+.theater { margin: clamp(18px, 3vw, 28px) auto 0; max-width: 780px; }
+.theater__label {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.28em;
+  color: var(--color-accent); margin-bottom: 10px;
+}
+.theater__screen {
+  position: relative; aspect-ratio: 16 / 9;
+  background: #14181d;
+  border: 6px solid #262b31;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow:
+    0 26px 60px rgb(var(--accent-rgb, 90 90 120) / 0.22),
+    0 2px 0 rgba(255, 255, 255, 0.5);
+}
+.theater__screen::after {
+  /* スクリーンの照り返し */
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(115deg, rgba(255,255,255,0.1), transparent 40%);
+  pointer-events: none;
+}
+.theater__screen iframe,
+.theater__screen img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: cover; border: 0;
+}
+.theater__play {
+  position: absolute; inset: 0;
+  display: grid; place-content: center;
+  background: rgba(10, 14, 18, 0.35);
+  border: 0; cursor: pointer;
+}
+.theater__play .pbtn {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: rgba(255, 255, 255, 0.94);
+  display: grid; place-content: center;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+  transition: transform 0.25s var(--ease-out);
+}
+.theater__play:hover .pbtn { transform: scale(1.1); }
+.theater__play .pbtn::before {
+  content: "";
+  border-style: solid; border-width: 11px 0 11px 19px;
+  border-color: transparent transparent transparent #14181d;
+  margin-left: 4px;
+}
+.theater__play .msg {
+  margin-top: 14px;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.2em;
+  color: rgba(255, 255, 255, 0.9);
+}
+.theater__caption {
+  margin-top: 12px; font-size: 13px; color: var(--color-muted);
+}
+.theater__caption strong { color: var(--color-text); font-weight: 700; }
+
+/* ティッカー項目のタグ(PICK UP / SPONSOR / のぼり) */
+.ticker__track .tk-tag {
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.18em;
+  color: var(--color-accent);
+  border: 1px solid currentColor; border-radius: 999px;
+  padding: 1px 9px; margin-right: 10px;
+}
+.ticker__track .tk-item { display: inline-flex; align-items: center; }
