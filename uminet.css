@@ -1348,3 +1348,106 @@ html.is-motion-off .sign--flicker, html.is-motion-off .sign--flicker2 { animatio
   .town .theater { width: 62%; bottom: 14%; }
   .town__scene { height: min(64svh, 500px); }
 }
+
+/* ---------- 21. 廃墟ビル×ド派手モニター×ピカピカ映画館(v3.1) ---------- */
+/* 廃墟のコンクリート壁: 暗い窓穴のグリッド+汚れ+崩れた上端 */
+.town__wall {
+  background:
+    radial-gradient(90px 60px at 24% 26%, rgba(30, 30, 26, 0.4), transparent 70%),
+    radial-gradient(120px 70px at 74% 64%, rgba(30, 30, 26, 0.32), transparent 70%),
+    radial-gradient(70px 90px at 50% 88%, rgba(30, 30, 26, 0.3), transparent 70%),
+    repeating-linear-gradient(180deg, rgba(24, 26, 24, 0.8) 0 16px, transparent 16px 30px),
+    repeating-linear-gradient(90deg, rgba(24, 26, 24, 0.8) 0 12px, transparent 12px 26px),
+    linear-gradient(180deg, #9a9a90, #6e6e64);
+  box-shadow: inset 0 0 46px rgba(0, 0, 0, 0.55);
+  clip-path: polygon(0 3.5%, 7% 0.5%, 16% 3%, 27% 1%, 38% 4%, 52% 1.5%, 64% 3.5%, 77% 1%, 89% 3%, 100% 1.5%, 100% 100%, 0 100%);
+}
+
+/* ド派手モニター(2種: 映像風グラデ / ポスター上映) */
+.sign--monitor {
+  padding: 0; overflow: hidden; position: relative;
+  aspect-ratio: 16 / 10;
+  background: #000;
+  border: 3px solid #17181c; border-radius: 4px;
+  box-shadow: 0 0 18px rgb(from currentColor r g b / 0.5);
+}
+.sign--monitor .scr {
+  position: absolute; inset: 0;
+  background: linear-gradient(120deg, #ff5fd0, #46e6ff, #b6ff42, #ffc247, #ff5fd0);
+  background-size: 320% 320%;
+  animation: monitorFlow 6s linear infinite alternate;
+}
+.sign--monitor img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.sign--monitor::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(180deg, rgba(0,0,0,0.28) 0 2px, transparent 2px 4px);
+  animation: monitorFlicker 4.6s infinite;
+  pointer-events: none;
+}
+@keyframes monitorFlow {
+  from { background-position: 0% 0%; filter: hue-rotate(0deg); }
+  to { background-position: 100% 100%; filter: hue-rotate(70deg); }
+}
+@keyframes monitorFlicker {
+  0%, 100% { opacity: 1; } 91% { opacity: 1; } 92% { opacity: 0.55; } 93% { opacity: 1; }
+}
+
+/* 流れるミニ電光掲示板 */
+.sign--marquee {
+  padding: 0; overflow: hidden;
+  background: #060606;
+  border: 2px solid #26262b; border-radius: 3px;
+  box-shadow: inset 0 0 8px #000, 0 0 12px rgb(from currentColor r g b / 0.4);
+}
+.sign--marquee .mq {
+  display: inline-block; white-space: nowrap;
+  padding: 6px 0;
+  font-family: var(--font-mono); font-weight: 700; font-size: 11.5px; letter-spacing: 0.12em;
+  animation: mqMove 11s linear infinite;
+  text-shadow: 0 0 5px currentColor;
+}
+@keyframes mqMove { from { transform: translateX(105%); } to { transform: translateX(-105%); } }
+
+/* 通りも廃墟の色に(瓦礫の粒) */
+.town__street {
+  background:
+    radial-gradient(3px 2px at 22% 40%, rgba(230,228,220,0.5), transparent 70%),
+    radial-gradient(2.5px 2px at 58% 70%, rgba(230,228,220,0.4), transparent 70%),
+    radial-gradient(3px 2px at 80% 30%, rgba(230,228,220,0.45), transparent 70%),
+    radial-gradient(2px 2px at 40% 82%, rgba(230,228,220,0.4), transparent 70%),
+    linear-gradient(180deg, #56564e, #3c3c36);
+}
+
+/* ピカピカ映画館: 電球のマーキーが追いかけ点滅+金の照り */
+.town .theater__stage {
+  overflow: visible;
+  animation: stageGlow 2.6s ease-in-out infinite alternate;
+}
+.town .theater__stage::after {
+  content: "";
+  position: absolute; inset: -13px;
+  border-radius: 16px;
+  pointer-events: none;
+  background:
+    radial-gradient(circle, #ffe9b0 2.6px, rgba(255, 200, 90, 0.25) 3.6px, transparent 4.6px) 0 0 / 24px 13px repeat-x,
+    radial-gradient(circle, #ffe9b0 2.6px, rgba(255, 200, 90, 0.25) 3.6px, transparent 4.6px) 0 100% / 24px 13px repeat-x,
+    radial-gradient(circle, #ffe9b0 2.6px, rgba(255, 200, 90, 0.25) 3.6px, transparent 4.6px) 0 0 / 13px 24px repeat-y,
+    radial-gradient(circle, #ffe9b0 2.6px, rgba(255, 200, 90, 0.25) 3.6px, transparent 4.6px) 100% 0 / 13px 24px repeat-y;
+  filter: drop-shadow(0 0 6px rgba(255, 214, 120, 0.9));
+  animation: bulbChase 0.9s steps(2) infinite;
+}
+@keyframes bulbChase {
+  to {
+    background-position: 24px 0, -24px 100%, 0 -24px, 100% 24px;
+  }
+}
+@keyframes stageGlow {
+  from { box-shadow: 0 0 26px rgba(255, 205, 100, 0.4), 0 24px 56px rgba(20, 14, 24, 0.4); }
+  to { box-shadow: 0 0 46px rgba(255, 215, 120, 0.75), 0 24px 56px rgba(20, 14, 24, 0.4); }
+}
+html.is-motion-off .sign--monitor .scr,
+html.is-motion-off .sign--monitor::after,
+html.is-motion-off .sign--marquee .mq,
+html.is-motion-off .town .theater__stage,
+html.is-motion-off .town .theater__stage::after { animation: none !important; }
