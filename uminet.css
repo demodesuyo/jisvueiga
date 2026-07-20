@@ -1213,3 +1213,138 @@ html.is-motion-off .ticker__track { animation: none !important; }
   text-shadow: 0 0 4px currentColor;   /* にじみ控えめでシャープに */
 }
 .ticker__track .tk-item { text-shadow: 0 0 4px currentColor; }
+
+/* ---------- 20. バーチャル自主映画タウン(v3.0) ---------- */
+.town__scene {
+  position: relative;
+  height: min(78svh, 620px);
+  margin-top: 14px;
+  perspective: 900px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: linear-gradient(180deg, transparent 0%, rgba(30, 24, 44, 0.06) 55%, rgba(30, 24, 44, 0.14) 100%);
+}
+/* 左右のビルの壁(奥へ続く) */
+.town__wall {
+  position: absolute; top: 0; bottom: 18%;
+  width: 34%;
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 12px;
+  background:
+    repeating-linear-gradient(180deg, rgba(255,255,255,0.05) 0 3px, transparent 3px 26px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.04) 0 3px, transparent 3px 22px),
+    linear-gradient(180deg, #322a46, #241f33);
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.45);
+}
+.town__wall--l { left: 0; transform: rotateY(42deg); transform-origin: left center; }
+.town__wall--r { right: 0; transform: rotateY(-42deg); transform-origin: right center; }
+
+/* 看板 */
+.sign {
+  display: block;
+  text-align: center;
+  padding: 8px 6px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  border: 2px solid currentColor;
+  background: rgba(10, 8, 16, 0.85);
+  text-shadow: 0 0 8px currentColor, 0 0 2px currentColor;
+  box-shadow: 0 0 12px rgb(from currentColor r g b / 0.35), inset 0 0 10px rgba(0,0,0,0.6);
+}
+.sign--cyan { color: #46e6ff; }
+.sign--pink { color: #ff5fd0; }
+.sign--lime { color: #b6ff42; }
+.sign--amber { color: #ffc247; }
+.sign--flicker { animation: neonFlicker 6s infinite; }
+.sign--flicker2 { animation: neonFlicker 8s 2.4s infinite; }
+@keyframes neonFlicker {
+  0%, 100% { opacity: 1; }
+  88% { opacity: 1; }
+  89% { opacity: 0.4; }
+  90% { opacity: 1; }
+  93% { opacity: 0.6; }
+  94% { opacity: 1; }
+}
+.sign--v { writing-mode: vertical-rl; padding: 10px 6px; margin-inline: auto; font-size: 15px; }
+.sign small { display: block; font-size: 9px; letter-spacing: 0.2em; opacity: 0.8; }
+
+/* ポスター看板(実作品) */
+.sign--poster { padding: 5px; border-color: rgba(255, 255, 255, 0.5); color: #fff; }
+.sign--poster img { width: 100%; aspect-ratio: 2/3; object-fit: cover; border-radius: 3px; display: block; }
+
+/* 広告募集枠(スポンサー販売) */
+.sign--ad {
+  color: #cfc6e6;
+  border-style: dashed;
+  background: rgba(255, 255, 255, 0.06);
+  text-shadow: none; box-shadow: none;
+  font-size: 11px;
+}
+.sign--ad strong { display: block; font-size: 13px; letter-spacing: 0.14em; }
+
+/* 頭上のストリングライト(提灯) */
+.town__lights {
+  position: absolute; left: 6%; right: 6%; top: 4%;
+  height: 60px; z-index: 3; pointer-events: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 60' preserveAspectRatio='none'%3E%3Cpath d='M0 8 Q 150 34 300 20 T 600 12' stroke='rgba(40,32,56,0.7)' stroke-width='2.5' fill='none'/%3E%3Cg fill='%23ffd98a'%3E%3Ccircle cx='60' cy='21' r='7'/%3E%3Ccircle cx='150' cy='31' r='7'/%3E%3Ccircle cx='240' cy='27' r='7'/%3E%3Ccircle cx='330' cy='20' r='7'/%3E%3Ccircle cx='420' cy='19' r='7'/%3E%3Ccircle cx='510' cy='15' r='7'/%3E%3C/g%3E%3C/svg%3E") no-repeat center / 100% 100%;
+  filter: drop-shadow(0 0 8px rgba(255, 217, 138, 0.75));
+}
+.town__lights--2 { top: 13%; transform: scaleX(-1); opacity: 0.85; }
+
+/* 通り(奥へ収束するアスファルト) */
+.town__street {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 19%;
+  background: linear-gradient(180deg, #3a3450, #2b2740);
+  clip-path: polygon(0 100%, 100% 100%, 82% 0, 18% 0);
+}
+.town__street::before {
+  content: "";
+  position: absolute; left: 50%; top: 0; bottom: 0; width: 5px;
+  transform: translateX(-50%);
+  background: repeating-linear-gradient(180deg, #ffd98a 0 12px, transparent 12px 26px);
+  opacity: 0.8;
+}
+
+/* 突き当たりのシアター */
+.town .theater {
+  position: absolute; left: 50%; bottom: 11%;
+  transform: translateX(-50%);
+  width: min(58%, 560px);
+  margin: 0; z-index: 2;
+}
+.town .theater__label {
+  display: inline-block;
+  background: #0b0b0c;
+  color: #ffc247;
+  border: 2px solid #2c2c30;
+  padding: 5px 16px;
+  margin-bottom: 0;
+  font-weight: 700;
+  text-shadow: 0 0 6px currentColor;
+}
+.town .theater__caption { display: none; }   /* キャプションは街の外に出す */
+.town__caption { text-align: center; margin-top: 12px; font-size: 13px; color: var(--color-muted); }
+.town__caption strong { color: var(--color-text); }
+
+@media (max-width: 767px) {
+  .town__scene { height: min(70svh, 540px); }
+  .town__wall { width: 38%; gap: 8px; padding: 8px; }
+  .sign { font-size: 11px; padding: 6px 4px; }
+  .sign--v { font-size: 12px; }
+  .sign--hide-sp { display: none; }
+  .town .theater { width: 74%; bottom: 12%; }
+}
+html.is-motion-off .sign--flicker, html.is-motion-off .sign--flicker2 { animation: none; }
+
+/* ---------- 20b. タウン崩れ修正 ---------- */
+.town__scene { clip-path: inset(0 round 12px); }  /* 3D壁のはみ出しを強制クリップ */
+.town .theater { width: min(50%, 520px); bottom: 13%; }
+@media (max-width: 767px) {
+  .town__wall { width: 33%; }
+  .town__wall--l { transform: rotateY(35deg); }
+  .town__wall--r { transform: rotateY(-35deg); }
+  .town .theater { width: 62%; bottom: 14%; }
+  .town__scene { height: min(64svh, 500px); }
+}

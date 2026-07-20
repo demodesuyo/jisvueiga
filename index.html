@@ -49,23 +49,47 @@
 
   <main>
     <!-- ヒーロー: 海面のきらめき(シグネチャー) -->
-    <section class="hero" data-season="spring">
+    <section class="hero town" data-season="spring">
       <div class="hero__beam" aria-hidden="true"></div>
       <canvas class="hero__dust" aria-hidden="true"></canvas>
       <div class="container hero__inner">
         <p class="hero__en js-reveal">Global Indie Film Guide</p>
         <h1 class="hero__title js-reveal" data-delay="1" data-chars>自主映画ねっと</h1>
         <p class="hero__lead js-reveal" data-delay="2">世界中のYouTubeで公開されている自主映画を、国別に、日本語の紹介つきで。季節がめぐるように、世界の才能と出会える場所です。</p>
-        <div class="theater js-reveal" data-delay="2" id="pickup-theater">
-          <p class="theater__label">— NOW SHOWING —</p>
-          <div class="theater__stage">
-            <span class="curtain curtain--l" aria-hidden="true"></span>
-            <span class="curtain curtain--r" aria-hidden="true"></span>
-            <div class="theater__screen"></div>
-            <span class="theater__seats" aria-hidden="true"></span>
+        <div class="town__scene js-reveal" data-delay="2" aria-label="バーチャル自主映画タウン(イメージ)">
+          <span class="town__lights" aria-hidden="true"></span>
+          <span class="town__lights town__lights--2" aria-hidden="true"></span>
+
+          <div class="town__wall town__wall--l" aria-hidden="false">
+            <span class="sign sign--cyan sign--flicker">上映中<small>NOW SHOWING</small></span>
+            <a class="sign sign--poster" href="works.html"><img src="film-br.svg" alt="青い街のポスター(サンプル)" width="960" height="1440"></a>
+            <span class="sign sign--lime sign--v">自主映画</span>
+            <a class="sign sign--ad" href="contact.html"><strong>AD</strong>ここに貴社の広告<br>→ 募集中</a>
+            <span class="sign sign--pink sign--flicker2 sign--hide-sp">24H FILM</span>
           </div>
-          <p class="theater__caption"></p>
+
+          <div class="town__wall town__wall--r">
+            <a class="sign sign--poster" href="works.html"><img src="film-in.svg" alt="モンスーンの手紙のポスター(サンプル)" width="960" height="1440"></a>
+            <span class="sign sign--amber sign--flicker2">クランクイン<small>SCREEN 02</small></span>
+            <a class="sign sign--ad" href="contact.html"><strong>AD</strong>ネオン看板<br>スポンサー募集</a>
+            <span class="sign sign--pink sign--v">映画のまち</span>
+            <span class="sign sign--cyan sign--flicker sign--hide-sp">FILM ★ TOWN</span>
+          </div>
+
+          <div class="theater" id="pickup-theater">
+            <p class="theater__label">— NOW SHOWING —</p>
+            <div class="theater__stage">
+              <span class="curtain curtain--l" aria-hidden="true"></span>
+              <span class="curtain curtain--r" aria-hidden="true"></span>
+              <div class="theater__screen"></div>
+              <span class="theater__seats" aria-hidden="true"></span>
+            </div>
+            <p class="theater__caption"></p>
+          </div>
+
+          <span class="town__street" aria-hidden="true"></span>
         </div>
+        <p class="town__caption js-reveal">上映中: <strong>『引き潮（Marée basse）』</strong> 🇫🇷 フランス・31分 — スクリーンをタップで予告編(準備中)</p>
         <div class="hero__actions js-reveal" data-delay="3">
           <a class="button" href="countries.html">国から探す</a>
           <a class="hero__sub-link" href="about.html">このサイトについて</a>
