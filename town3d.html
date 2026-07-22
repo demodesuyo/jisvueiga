@@ -56,9 +56,8 @@
     <a href="works.html">上映中の作品を見る ▶</a>
   </div>
 
-  <script src="three.min.js"></script>
   <script>
-  (function () {
+  function initTown() {
     var stage = document.getElementById("stage");
     var W = innerWidth, H = innerHeight;
     var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -329,6 +328,28 @@
       camera.updateProjectionMatrix();
       renderer.setSize(W, H);
     }, { passive: true });
+  }
+
+  /* three.js 三段構えローダー: ローカル → CDN → エラー表示 */
+  (function () {
+    function fail() {
+      var d = document.createElement("div");
+      d.style.cssText = "position:fixed;inset:0;display:grid;place-content:center;text-align:center;background:#fff6f9;color:#7a5a70;font-size:14px;line-height:2;padding:24px;z-index:99";
+      d.innerHTML = "3D部品(three.js)の読み込みに失敗しました。<br>通信環境を変えて再読み込みしてみてください。";
+      document.body.appendChild(d);
+    }
+    function tryCdn() {
+      var c = document.createElement("script");
+      c.src = "https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js";
+      c.onload = function () { window.THREE ? initTown() : fail(); };
+      c.onerror = fail;
+      document.head.appendChild(c);
+    }
+    var s = document.createElement("script");
+    s.src = "three.min.js";
+    s.onload = function () { window.THREE ? initTown() : tryCdn(); };
+    s.onerror = tryCdn;
+    document.head.appendChild(s);
   })();
   </script>
 </body>
