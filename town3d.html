@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>自主映画タウン 3D（試作） | 自主映画ねっと</title>
+  <meta name="description" content="バーチャル自主映画タウンの3D試作。スクロールで街を歩いて、野外スクリーンへ。">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="favicon.ico">
+  <style>
+    * { margin: 0; box-sizing: border-box; }
+    html { scroll-behavior: auto; }
+    body {
+      font-family: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", sans-serif;
+      background: linear-gradient(180deg, #fff6f9 0%, #fdeaf1 45%, #f6dce8 100%);
+      color: #3c2f3a;
+      height: 460svh;                 /* スクロールの長さ=歩く距離 */
+    }
+    #stage { position: fixed; inset: 0; }
+    canvas { display: block; }
+    .hud {
+      position: fixed; inset: 0; pointer-events: none;
+      display: grid; place-content: center; text-align: center;
+      transition: opacity 0.6s;
+    }
+    .hud h1 { font-size: clamp(26px, 7vw, 54px); letter-spacing: 0.14em; text-shadow: 0 2px 18px rgba(255,255,255,0.9); }
+    .hud p { margin-top: 10px; font-size: 13px; letter-spacing: 0.28em; color: #8a6f83; }
+    .hud.is-hidden { opacity: 0; }
+    .end {
+      position: fixed; left: 0; right: 0; bottom: 7svh;
+      text-align: center; opacity: 0; transition: opacity 0.6s; pointer-events: none;
+    }
+    .end.is-on { opacity: 1; pointer-events: auto; }
+    .end a {
+      display: inline-block; padding: 14px 38px;
+      background: #b3486b; color: #fff; text-decoration: none;
+      border-radius: 3px; font-weight: 700; letter-spacing: 0.1em;
+      box-shadow: 0 10px 26px rgba(179, 72, 107, 0.4);
+    }
+    .back {
+      position: fixed; top: 14px; left: 14px; z-index: 5;
+      font-size: 12px; letter-spacing: 0.1em; color: #6d5a68;
+      background: rgba(255,255,255,0.8); padding: 8px 14px; border-radius: 999px;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <a class="back" href="index.html">← 自主映画ねっとへ戻る</a>
+  <div id="stage"></div>
+  <div class="hud" id="hud">
+    <h1>自主映画タウン</h1>
+    <p>SCROLL TO WALK — 3D PROTOTYPE</p>
+  </div>
+  <div class="end" id="end">
+    <a href="works.html">上映中の作品を見る ▶</a>
+  </div>
+
+  <script src="three.min.js"></script>
+  <script>
+  (function () {
+    var stage = document.getElementById("stage");
+    var W = innerWidth, H = innerHeight;
+    var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.setSize(W, H);
+    stage.appendChild(renderer.domElement);
+
+    var scene = new THREE.Scene();
+    scene.fog = new THREE.Fog(0xf8e4ee, 26, 90);
+    var camera = new THREE.PerspectiveCamera(58, W / H, 0.1, 220);
+
+    scene.add(new THREE.HemisphereLight(0xfff2f6, 0x9a8496, 1.05));
+    var sun = new THREE.DirectionalLight(0xfff0d8, 0.8);
+    sun.position.set(-6, 14, 6);
+    scene.add(sun);
+
+    /* ---- テクスチャ工房(canvasで自作) ---- */
+    function tex(w, h, draw) {
+      var c = document.createElement("canvas");
+      c.width = w; c.height = h;
+      draw(c.getContext("2d"), w, h);
+      var t = new THREE.CanvasTexture(c);
+      t.anisotropy = 4;
+      return t;
+    }
+    // 廃墟の壁(コンクリ+暗い窓穴+汚れ)
+    function ruinTex(seed) {
+      return tex(256, 512, function (g, w, h) {
+        g.fillStyle = "#8f8f86"; g.fillRect(0, 0, w, h);
+        var grad = g.createLinearGradient(0, 0, 0, h);
+        grad.addColorStop(0, "rgba(255,255,255,0.14)");
+        grad.addColorStop(1, "rgba(30,30,26,0.3)");
+        g.fillStyle = grad; g.fillRect(0, 0, w, h);
+        for (var y = 26; y < h - 20; y += 52) {
+          for (var x = 18; x < w - 30; x += 46) {
+            var lit = Math.random() < 0.12;
+            g.fillStyle = lit ? (Math.random() < 0.5 ? "#ffd98a" : "#7fdcef") : "rgba(22,24,22,0.88)";
+            g.fillRect(x, y, 26, 34);
+          }
+        }
+        for (var i = 0; i < 9; i++) {   // 雨染み
+          g.fillStyle = "rgba(40,40,34," + (0.08 + Math.random() * 0.12) + ")";
+          var sx = Math.random() * w;
+          g.fillRect(sx, Math.random() * h * 0.4, 5 + Math.random() * 10, 90 + Math.random() * 150);
+        }
+      });
+    }
+    // ド派手モニター(毎フレーム描き換え)
+    function makeMonitor() {
+      var c = document.createElement("canvas");
+      c.width = 128; c.height = 80;
+      var g = c.getContext("2d");
+      var t = new THREE.CanvasTexture(c);
+      return {
+        texture: t,
+        hue: Math.random() * 360,
+        speed: 0.6 + Math.random() * 0.8,
+        update: function () {
+          this.hue = (this.hue + this.speed) % 360;
+          var gr = g.createLinearGradient(0, 0, 128, 80);
+          gr.addColorStop(0, "hsl(" + this.hue + ",95%,62%)");
+          gr.addColorStop(0.5, "hsl(" + ((this.hue + 90) % 360) + ",95%,58%)");
+          gr.addColorStop(1, "hsl(" + ((this.hue + 200) % 360) + ",95%,62%)");
+          g.fillStyle = gr; g.fillRect(0, 0, 128, 80);
+          g.fillStyle = "rgba(0,0,0,0.25)";
+          for (var y = 0; y < 80; y += 4) g.fillRect(0, y, 128, 1.6);
+          t.needsUpdate = true;
+        }
+      };
+    }
+    // 流れる電光掲示板
+    function makeMarquee(text, color) {
+      var c = document.createElement("canvas");
+      c.width = 512; c.height = 40;
+      var g = c.getContext("2d");
+      var t = new THREE.CanvasTexture(c);
+      t.wrapS = THREE.RepeatWrapping;
+      var off = 0;
+      return {
+        texture: t,
+        update: function () {
+          off = (off + 1.6) % 512;
+          g.fillStyle = "#0a0a0b"; g.fillRect(0, 0, 512, 40);
+          g.font = "bold 26px 'IBM Plex Mono', monospace";
+          g.fillStyle = color;
+          g.shadowColor = color; g.shadowBlur = 10;
+          g.fillText(text, 512 - off, 29);
+          g.fillText(text, 512 - off + 620, 29);
+          g.shadowBlur = 0;
+          g.fillStyle = "rgba(0,0,0,0.4)";
+          for (var x = 0; x < 512; x += 3) g.fillRect(x, 0, 1, 40);
+          t.needsUpdate = true;
+        }
+      };
+    }
+    // 野外スクリーン
+    var screenTex = tex(512, 288, function (g) {
+      g.fillStyle = "#f6f4ee"; g.fillRect(0, 0, 512, 288);
+      g.fillStyle = "#8d8a92";
+      g.font = "bold 30px 'IBM Plex Mono', monospace";
+      g.textAlign = "center";
+      g.fillText("COMING SOON", 256, 128);
+      g.font = "18px sans-serif";
+      g.fillText("『引き潮（Marée basse）』", 256, 172);
+    });
+
+    /* ---- 街を建てる ---- */
+    var STREET = 6.4;                 // 道幅
+    var monitors = [], marquees = [];
+    var conc = new THREE.MeshLambertMaterial({ color: 0x8f8f86 });
+
+    function building(z, side) {
+      var w = 4 + Math.random() * 3, d = 4 + Math.random() * 2.5, h = 7 + Math.random() * 9;
+      var m = new THREE.Mesh(
+        new THREE.BoxGeometry(w, h, d),
+        new THREE.MeshLambertMaterial({ map: ruinTex() })
+      );
+      m.position.set(side * (STREET / 2 + w / 2), h / 2, z);
+      scene.add(m);
+      // 正面(道路側)にモニターを2〜3枚
+      var n = 2 + (Math.random() < 0.5 ? 1 : 0);
+      for (var k = 0; k < n; k++) {
+        var mon = makeMonitor();
+        monitors.push(mon);
+        var pw = 1.6 + Math.random() * 1.2, ph = pw * 0.62;
+        var p = new THREE.Mesh(
+          new THREE.PlaneGeometry(pw, ph),
+          new THREE.MeshBasicMaterial({ map: mon.texture })
+        );
+        p.position.set(
+          side * (STREET / 2 - 0.02),
+          1.8 + k * 2.2 + Math.random() * 0.8,
+          z + (Math.random() - 0.5) * d * 0.6
+        );
+        p.rotation.y = -side * Math.PI / 2;
+        scene.add(p);
+      }
+      // たまに電光掲示板
+      if (Math.random() < 0.55) {
+        var colors = ["#ffc247", "#56f07d", "#ff6ad5", "#59d7ff"];
+        var mq = makeMarquee("上映中 引き潮 ── 応援メッセージ募集 ── AD発売中 ", colors[Math.floor(Math.random() * 4)]);
+        marquees.push(mq);
+        var strip = new THREE.Mesh(
+          new THREE.PlaneGeometry(3.4, 0.34),
+          new THREE.MeshBasicMaterial({ map: mq.texture })
+        );
+        strip.position.set(side * (STREET / 2 - 0.03), 4.6 + Math.random() * 2, z);
+        strip.rotation.y = -side * Math.PI / 2;
+        scene.add(strip);
+      }
+    }
+    for (var z = -6; z > -66; z -= 7.5) { building(z, -1); building(z, 1); }
+
+    // 道路
+    var road = new THREE.Mesh(
+      new THREE.PlaneGeometry(STREET, 90),
+      new THREE.MeshLambertMaterial({ color: 0x4c4a44 })
+    );
+    road.rotation.x = -Math.PI / 2;
+    road.position.z = -35;
+    scene.add(road);
+    for (var lz = -2; lz > -70; lz -= 3) {   // センターライン
+      var line = new THREE.Mesh(
+        new THREE.PlaneGeometry(0.16, 1.4),
+        new THREE.MeshBasicMaterial({ color: 0xffd98a })
+      );
+      line.rotation.x = -Math.PI / 2;
+      line.position.set(0, 0.01, lz);
+      scene.add(line);
+    }
+
+    // 万国旗(色つき三角の列)を2本
+    function bunting(y, z1, z2, flip) {
+      var cols = [0xe05252, 0x2fa8a0, 0xf3c04a, 0x5a7fd6, 0xe6875a];
+      for (var i = 0; i <= 10; i++) {
+        var t = i / 10;
+        var x = (t - 0.5) * STREET * (flip ? -1 : 1);
+        var fy = y - Math.sin(t * Math.PI) * 0.7;
+        var flag = new THREE.Mesh(
+          new THREE.ConeGeometry(0.14, 0.34, 3),
+          new THREE.MeshBasicMaterial({ color: cols[i % 5] })
+        );
+        flag.position.set(x, fy, z1 + (z2 - z1) * t);
+        flag.rotation.z = Math.PI;
+        scene.add(flag);
+      }
+    }
+    bunting(5.4, -10, -14, false);
+    bunting(5.0, -22, -27, true);
+    bunting(5.6, -38, -43, false);
+
+    // 突き当たりの野外スクリーン+ポール+観客
+    var endZ = -62;
+    var sc = new THREE.Mesh(
+      new THREE.PlaneGeometry(5.6, 3.15),
+      new THREE.MeshBasicMaterial({ map: screenTex })
+    );
+    sc.position.set(0, 2.7, endZ);
+    scene.add(sc);
+    var frame = new THREE.Mesh(
+      new THREE.PlaneGeometry(6.0, 3.55),
+      new THREE.MeshBasicMaterial({ color: 0xfaf7f0 })
+    );
+    frame.position.set(0, 2.7, endZ - 0.02);
+    scene.add(frame);
+    [-3.15, 3.15].forEach(function (x) {
+      var pole = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.07, 0.09, 5.4, 8),
+        new THREE.MeshLambertMaterial({ color: 0x3e382f })
+      );
+      pole.position.set(x, 2.7, endZ - 0.05);
+      scene.add(pole);
+    });
+    for (var a = 0; a < 12; a++) {   // 観客の頭
+      var head = new THREE.Mesh(
+        new THREE.SphereGeometry(0.16 + Math.random() * 0.07, 10, 10),
+        new THREE.MeshLambertMaterial({ color: 0x2a2433 })
+      );
+      head.position.set((Math.random() - 0.5) * 4.6, 0.5 + Math.random() * 0.15, endZ + 2.2 + Math.random() * 1.6);
+      scene.add(head);
+    }
+
+    // 桜吹雪(切れ込み入りは遠景なので簡略の板)
+    var petals = [];
+    var petalGeo = new THREE.PlaneGeometry(0.14, 0.1);
+    var petalMat = new THREE.MeshBasicMaterial({ color: 0xf9c6d6, transparent: true, opacity: 0.85, side: THREE.DoubleSide });
+    for (var pi = 0; pi < 110; pi++) {
+      var pe = new THREE.Mesh(petalGeo, petalMat);
+      pe.position.set((Math.random() - 0.5) * 14, Math.random() * 9, -Math.random() * 66);
+      pe.userData = { vy: 0.008 + Math.random() * 0.012, ph: Math.random() * 6.3 };
+      scene.add(pe);
+      petals.push(pe);
+    }
+
+    /* ---- スクロール=歩行 ---- */
+    var hud = document.getElementById("hud");
+    var end = document.getElementById("end");
+    function progress() {
+      var max = document.body.scrollHeight - innerHeight;
+      return max > 0 ? Math.min(scrollY / max, 1) : 0;
+    }
+    var clock = new THREE.Clock();
+    function loop() {
+      var p = progress();
+      var t = clock.getElapsedTime();
+      camera.position.z = 4 - p * 58;                    // 4 → -54 (スクリーン手前)
+      camera.position.x = Math.sin(t * 0.6) * 0.12;      // 歩く揺れ
+      camera.position.y = 1.7 + Math.sin(t * 1.2) * 0.04;
+      camera.lookAt(0, 2.2, camera.position.z - 10);
+      hud.classList.toggle("is-hidden", p > 0.06);
+      end.classList.toggle("is-on", p > 0.93);
+      monitors.forEach(function (m) { m.update(); });
+      marquees.forEach(function (m) { m.update(); });
+      petals.forEach(function (pe) {
+        pe.position.y -= pe.userData.vy;
+        pe.position.x += Math.sin(t + pe.userData.ph) * 0.004;
+        pe.rotation.x += 0.02; pe.rotation.y += 0.03;
+        if (pe.position.y < 0) pe.position.y = 9;
+      });
+      renderer.render(scene, camera);
+      requestAnimationFrame(loop);
+    }
+    loop();
+
+    addEventListener("resize", function () {
+      W = innerWidth; H = innerHeight;
+      camera.aspect = W / H;
+      camera.updateProjectionMatrix();
+      renderer.setSize(W, H);
+    }, { passive: true });
+  })();
+  </script>
+</body>
+</html>
